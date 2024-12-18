@@ -1,0 +1,7 @@
+Conflux module
+==============
+
+.. automodule:: Conflux
+   :members:
+   :undoc-members:
+   :show-inheritance:

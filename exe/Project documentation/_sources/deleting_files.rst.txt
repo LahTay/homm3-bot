@@ -1,0 +1,7 @@
+deleting\_files module
+======================
+
+.. automodule:: deleting_files
+   :members:
+   :undoc-members:
+   :show-inheritance:

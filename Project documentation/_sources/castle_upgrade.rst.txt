@@ -1,0 +1,7 @@
+castle\_upgrade module
+======================
+
+.. automodule:: castle_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

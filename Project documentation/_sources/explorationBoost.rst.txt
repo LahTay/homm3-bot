@@ -1,0 +1,7 @@
+explorationBoost module
+=======================
+
+.. automodule:: explorationBoost
+   :members:
+   :undoc-members:
+   :show-inheritance:

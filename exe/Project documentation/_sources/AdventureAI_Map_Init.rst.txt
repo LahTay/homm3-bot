@@ -1,0 +1,7 @@
+AdventureAI\_Map\_Init module
+=============================
+
+.. automodule:: AdventureAI_Map_Init
+   :members:
+   :undoc-members:
+   :show-inheritance:

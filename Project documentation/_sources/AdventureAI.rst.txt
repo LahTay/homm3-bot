@@ -1,0 +1,7 @@
+AdventureAI module
+==================
+
+.. automodule:: AdventureAI
+   :members:
+   :undoc-members:
+   :show-inheritance:

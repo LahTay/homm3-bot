@@ -1,0 +1,7 @@
+Castle module
+=============
+
+.. automodule:: Castle
+   :members:
+   :undoc-members:
+   :show-inheritance:

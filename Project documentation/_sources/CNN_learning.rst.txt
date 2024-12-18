@@ -1,0 +1,7 @@
+CNN\_learning module
+====================
+
+.. automodule:: CNN_learning
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+artifact\_value module
+======================
+
+.. automodule:: artifact_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

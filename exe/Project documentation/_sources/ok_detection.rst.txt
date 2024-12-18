@@ -1,0 +1,7 @@
+ok\_detection module
+====================
+
+.. automodule:: ok_detection
+   :members:
+   :undoc-members:
+   :show-inheritance:

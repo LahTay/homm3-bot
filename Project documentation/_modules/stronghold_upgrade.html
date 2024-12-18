@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>stronghold_upgrade &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for stronghold_upgrade</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script containing Stronghold castle upgrade alghoritm&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">town_upgrading.choice_generator</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">GUI_handling.TownGUI</span> <span class="kn">import</span> <span class="n">buy_building</span>
+
+
+<div class="viewcode-block" id="resourceCheck"><a class="viewcode-back" href="../stronghold_upgrade.html#stronghold_upgrade.resourceCheck">[docs]</a><span class="k">def</span> <span class="nf">resourceCheck</span><span class="p">(</span><span class="n">buildingCost</span><span class="p">,</span> <span class="n">playerRsrc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if a player has enough resources to build.</span>
+<span class="sd">    :param buildingCost: Cost of the given building</span>
+<span class="sd">    :param playerRsrc: Resources of the player</span>
+<span class="sd">    :return: true or false</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">playerRsrc</span><span class="o">.</span><span class="n">gold</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">gold</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">playerRsrc</span><span class="o">.</span><span class="n">wood</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">wood</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">playerRsrc</span><span class="o">.</span><span class="n">ore</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">ore</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">playerRsrc</span><span class="o">.</span><span class="n">mercury</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">mercury</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">playerRsrc</span><span class="o">.</span><span class="n">sulfur</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">sulfur</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">playerRsrc</span><span class="o">.</span><span class="n">crystal</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">crystal</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">playerRsrc</span><span class="o">.</span><span class="n">gems</span> <span class="o">&gt;=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">gems</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="build"><a class="viewcode-back" href="../stronghold_upgrade.html#stronghold_upgrade.build">[docs]</a><span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="n">buildingCost</span><span class="p">,</span> <span class="n">playerRsrc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Functions responsible for building and managing resources after construction</span>
+<span class="sd">    :param buildingCost: Cost of the given building</span>
+<span class="sd">    :param playerRsrc: Resources of the player</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">gold</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">gold</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">wood</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">wood</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">ore</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">ore</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">mercury</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">mercury</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">sulfur</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">sulfur</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">crystal</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">crystal</span>
+    <span class="n">playerRsrc</span><span class="o">.</span><span class="n">gems</span> <span class="o">-=</span> <span class="n">buildingCost</span><span class="o">.</span><span class="n">gems</span></div>
+
+
+<div class="viewcode-block" id="strongholdUpgrade"><a class="viewcode-back" href="../stronghold_upgrade.html#stronghold_upgrade.strongholdUpgrade">[docs]</a><span class="k">def</span> <span class="nf">strongholdUpgrade</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">stronghold</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Stronghold castle upgrade alghoritm.</span>
+<span class="sd">    :param player: Player object</span>
+<span class="sd">    :param stronghold: Stronghold object</span>
+<span class="sd">    :return: None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># ----------------------------HARDCODED ZONE-----------------------------------------------</span>
+    <span class="c1"># Tavern</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">built</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Tavern built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Fort</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">tavern</span><span class="o">.</span><span class="n">built</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Fort lvl 1 built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Goblin Barracks</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">built</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Goblin Barracks built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Wolf Pen</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Wolf Pen built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Cliff Nest</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cliff Nest built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Behemoth Lair</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Behemoth Lair built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Orc Tower</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Orc Tower built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="c1"># Town Hall</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">daily_income</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">500</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;City Hall built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># ----------------------------HARDCODED ZONE-----------------------------------------------</span>
+    <span class="c1"># [hab = build habitat], [upg = upgrade habitat], [wall = build/upgrade fort], [capi = build/upgrade city_hall], [MG_M = build Marketplace , upgrade/build mage_guild, build blacksmith], [builds = build other buildings]</span>
+    <span class="n">hab</span><span class="p">,</span> <span class="n">upg</span><span class="p">,</span> <span class="n">wall</span><span class="p">,</span> <span class="n">capi</span><span class="p">,</span> <span class="n">MG_M</span><span class="p">,</span> <span class="n">builds</span> <span class="o">=</span> <span class="n">town_choice</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">stronghold</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------------------------------</span>
+    <span class="c1"># Mage guild Level 1</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">MG_M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mage guild Level 1!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Marketplace</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">MG_M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Marketplace built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Blacksmith</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">MG_M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Blacksmith built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># City Hall</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">capi</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">daily_income</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1000</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;City Hall built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Citadel</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">wall</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Citadel built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Ogre Fort</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">hab</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ogre Fort built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Castle</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">wall</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Castle built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Capitol</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">capi</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">city_hall_lvl</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">daily_income</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">2000</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">city_hall</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Capitol built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Orc Tower</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t3_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Orc Tower upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Hall of Valhalla</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">hall_of_valhalla</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">fort</span><span class="o">.</span><span class="n">fort_lvl</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">builds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">hall_of_valhalla</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">hall_of_valhalla</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">hall_of_valhalla</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">hall_of_valhalla</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Hall of Valhalla built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Goblin Barracks</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Goblin Barracks upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Wolf Pen</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">2</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t2_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Wolf Pen upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Cliff Nest</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t5_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cliff Nest upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Ogre Fort</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ogre Fort upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Mage guild Level 2</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">MG_M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mage guild Level 2!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Mage guild Level 3</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">MG_M</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">mage_guild_lvl</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mage_guild</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mage guild Level 3!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Behemoth</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t7_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Behemoths upgraded!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Freelancers Guild</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">freelancers_guild</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">builds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">freelancers_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">freelancers_guild</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">freelancers_guild</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">freelancers_guild</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Freelancers Guild built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Resource Silo</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">resource_silo</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">marketplace</span><span class="o">.</span><span class="n">built</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">resource_silo</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">resource_silo</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">resource_silo</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">daily_income</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">daily_income</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">resource_silo</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resource Silo built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Cyclops Cave</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t4_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">0</span> <span class="ow">and</span> <span class="n">hab</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">1</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Cyclops Cave built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Upg. Cyclops Cave</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">==</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">upg</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">=</span><span class="mi">2</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">t6_generator_lvl</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Upgraded Cyclops Cave!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Mess Hall</span>
+    <span class="k">if</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">t1_generator_lvl</span><span class="o">.</span><span class="n">habitat_lvl</span><span class="o">&gt;=</span><span class="mi">1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">mess_hall</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">builds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mess_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mess_hall</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">mess_hall</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">mess_hall</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Mess Hall built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Ballista Yard</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">ballists_yard</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">stronghold</span><span class="o">.</span><span class="n">blacksmith</span><span class="o">.</span><span class="n">built</span> <span class="ow">and</span> <span class="n">builds</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resourceCheck</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">ballists_yard</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">):</span>
+            <span class="n">build</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">ballists_yard</span><span class="o">.</span><span class="n">cost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">player</span><span class="p">)</span>
+            <span class="n">stronghold</span><span class="o">.</span><span class="n">ballists_yard</span><span class="o">.</span><span class="n">built</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">buy_building</span><span class="p">(</span><span class="n">stronghold</span><span class="o">.</span><span class="n">ballists_yard</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;stronghold&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Ballista Yard built!&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not enough resources!&#39;</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

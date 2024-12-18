@@ -1,0 +1,7 @@
+resources\_dec\_tree module
+===========================
+
+.. automodule:: resources_dec_tree
+   :members:
+   :undoc-members:
+   :show-inheritance:

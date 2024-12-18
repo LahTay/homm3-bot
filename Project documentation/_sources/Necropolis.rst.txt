@@ -1,0 +1,7 @@
+Necropolis module
+=================
+
+.. automodule:: Necropolis
+   :members:
+   :undoc-members:
+   :show-inheritance:

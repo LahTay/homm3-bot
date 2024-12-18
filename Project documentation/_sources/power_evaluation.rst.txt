@@ -1,0 +1,7 @@
+power\_evaluation module
+========================
+
+.. automodule:: power_evaluation
+   :members:
+   :undoc-members:
+   :show-inheritance:

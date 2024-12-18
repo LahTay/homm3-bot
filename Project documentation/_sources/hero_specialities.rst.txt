@@ -1,0 +1,7 @@
+hero\_specialities module
+=========================
+
+.. automodule:: hero_specialities
+   :members:
+   :undoc-members:
+   :show-inheritance:

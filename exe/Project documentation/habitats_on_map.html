@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>habitats_on_map module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-habitats_on_map">
+<span id="habitats-on-map-module"></span><h1>habitats_on_map module<a class="headerlink" href="#module-habitats_on_map" title="Permalink to this heading">¶</a></h1>
+<p>Script containing Habitat_On_Map class and objects belonging to that class</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="habitats_on_map.Habitat_On_Map">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">habitats_on_map.</span></span><span class="sig-name descname"><span class="pre">Habitat_On_Map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Creature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guards</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Slots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unit_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_cost</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Cost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">growth</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entrance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">free</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/habitats_on_map.html#Habitat_On_Map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#habitats_on_map.Habitat_On_Map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>unit</strong> (<em>Creature</em>) – </p></li>
+<li><p><strong>guards</strong> (<em>Slots</em>) – </p></li>
+<li><p><strong>unit_cost</strong> (<em>Cost</em>) – </p></li>
+<li><p><strong>total_cost</strong> (<em>Cost</em>) – </p></li>
+<li><p><strong>growth</strong> (<em>int</em>) – </p></li>
+<li><p><strong>number</strong> (<em>int</em>) – </p></li>
+<li><p><strong>entrance</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="habitats_on_map.Habitat_On_Map.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hero</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">okay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/habitats_on_map.html#Habitat_On_Map.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#habitats_on_map.Habitat_On_Map.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checking amount of gold an buying maximum amount of units available
+and buying units in habitat only if we can add them to our army</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> – player object</p></li>
+<li><p><strong>hero</strong> – hero object</p></li>
+<li><p><strong>okay</strong> – unused parameter</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="habitats_on_map.Habitat_On_Map.end_day">
+<span class="sig-name descname"><span class="pre">end_day</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/habitats_on_map.html#Habitat_On_Map.end_day"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#habitats_on_map.Habitat_On_Map.end_day" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crucial function that doesnt do anything</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>player</strong> – player object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="habitats_on_map.Habitat_On_Map.end_week">
+<span class="sig-name descname"><span class="pre">end_week</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/habitats_on_map.html#Habitat_On_Map.end_week"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#habitats_on_map.Habitat_On_Map.end_week" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sums up number of units in habitat and growth</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>player</strong> – player object</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/habitats_on_map.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

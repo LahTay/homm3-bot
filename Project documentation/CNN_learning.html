@@ -1,0 +1,285 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>CNN_learning module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-CNN_learning">
+<span id="cnn-learning-module"></span><h1>CNN_learning module<a class="headerlink" href="#module-CNN_learning" title="Permalink to this heading">¶</a></h1>
+<p>Script containing neural network classes that we use in obstacle/creature in queue recognition</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CNN_learning.CNN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">CNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(33,</span> <span class="pre">33,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./model/model/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">69</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>tuple</em>) – </p></li>
+<li><p><strong>path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_of_classes</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.CNN.add_learning_images">
+<span class="sig-name descname"><span class="pre">add_learning_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'../structures/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN.add_learning_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN.add_learning_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>function adding learning dataset for neural network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_directory</strong> (<em>str</em>) – path to directory containing dataset for function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.CNN.add_test_images">
+<span class="sig-name descname"><span class="pre">add_test_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./test/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN.add_test_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN.add_test_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>function adding test dataset for neural network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_directory</strong> (<em>str</em>) – path to directory containing dataset for function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.CNN.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>function loading weightfiles from path specified in init</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.CNN.test_network">
+<span class="sig-name descname"><span class="pre">test_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN.test_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN.test_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>function evaluating neural network</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.CNN.train_network">
+<span class="sig-name descname"><span class="pre">train_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#CNN.train_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.CNN.train_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>function training and evaluating neural network, needs earlier 2 function to be called before being able to work</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">DumbNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(33,</span> <span class="pre">33,</span> <span class="pre">3)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'./models/model/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_of_classes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">165</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> (<em>tuple</em>) – </p></li>
+<li><p><strong>path</strong> (<em>str</em>) – </p></li>
+<li><p><strong>num_of_classes</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN.add_learning_images">
+<span class="sig-name descname"><span class="pre">add_learning_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'../unit_portraits/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN.add_learning_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN.add_learning_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>function adding learning dataset for neural network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_directory</strong> (<em>str</em>) – path to directory containing dataset for function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN.add_test_images">
+<span class="sig-name descname"><span class="pre">add_test_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_to_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'../queue_test/'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN.add_test_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN.add_test_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>function adding test dataset for neural network</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path_to_directory</strong> (<em>str</em>) – path to directory containing dataset for function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN.load_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>function loading weightfiles from path specified in init</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN.test_network">
+<span class="sig-name descname"><span class="pre">test_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN.test_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN.test_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>function evaluating neural network</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CNN_learning.DumbNN.train_network">
+<span class="sig-name descname"><span class="pre">train_network</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#DumbNN.train_network"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.DumbNN.train_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>function training and evaluating neural network, needs earlier 2 function to be called before being able to work</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.abomination">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">abomination</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#abomination"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.abomination" title="Permalink to this definition">¶</a></dt>
+<dd><p>just dont
+function created for finding which classes of output is giving most errors in first iteration of neural network based image recognition</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list containing each pair of bad predictions of network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.train_artifact_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">train_artifact_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#train_artifact_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.train_artifact_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for creating and training of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.train_battle1_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">train_battle1_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#train_battle1_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.train_battle1_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for creating and training of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.train_creatures_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">train_creatures_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#train_creatures_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.train_creatures_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for creating and training of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.train_map_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">train_map_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#train_map_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.train_map_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for creating and training of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.train_queue_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">train_queue_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#train_queue_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.train_queue_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for creating and training of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.try_artifact_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">try_artifact_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#try_artifact_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.try_artifact_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for loading and testing of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.try_battle1_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">try_battle1_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#try_battle1_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.try_battle1_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for loading and testing of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.try_creatures_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">try_creatures_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#try_creatures_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.try_creatures_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for loading and testing of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.try_map_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">try_map_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#try_map_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.try_map_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for loading and testing of specyfic neural network</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CNN_learning.try_queue_NN">
+<span class="sig-prename descclassname"><span class="pre">CNN_learning.</span></span><span class="sig-name descname"><span class="pre">try_queue_NN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/CNN_learning.html#try_queue_NN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#CNN_learning.try_queue_NN" title="Permalink to this definition">¶</a></dt>
+<dd><p>helper function for loading and testing of specyfic neural network</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/CNN_learning.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

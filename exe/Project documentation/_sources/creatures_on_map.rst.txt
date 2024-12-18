@@ -1,0 +1,7 @@
+creatures\_on\_map module
+=========================
+
+.. automodule:: creatures_on_map
+   :members:
+   :undoc-members:
+   :show-inheritance:

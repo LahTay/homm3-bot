@@ -1,0 +1,7 @@
+objects\_on\_map module
+=======================
+
+.. automodule:: objects_on_map
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+screen\_slicing module
+======================
+
+.. automodule:: screen_slicing
+   :members:
+   :undoc-members:
+   :show-inheritance:

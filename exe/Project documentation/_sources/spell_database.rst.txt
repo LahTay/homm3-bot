@@ -1,0 +1,7 @@
+spell\_database module
+======================
+
+.. automodule:: spell_database
+   :members:
+   :undoc-members:
+   :show-inheritance:

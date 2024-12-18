@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>BattleGUI module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-BattleGUI">
+<span id="battlegui-module"></span><h1>BattleGUI module<a class="headerlink" href="#module-BattleGUI" title="Permalink to this heading">¶</a></h1>
+<p>Script containing functions essential for handling battle GUI.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.area_attack">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">area_attack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#area_attack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.area_attack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attack area. For Magogs and Liches</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x coord</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y coord</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.attack_enemy">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">attack_enemy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#attack_enemy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.attack_enemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attacks the enemy on the given coordinates from a given direction. Possible directions are:
+‘top’, ‘top_right’, ‘right’, ‘bottom_right’, ‘bottom’, ‘bottom_left’, ‘left’, ‘top_left’
+Works the same way as move_to_tile with additional direction</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x coord</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y coord</p></li>
+<li><p><strong>direction</strong> (<em>str</em>) – direction we want to attack from</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.auto_combat">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">auto_combat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#auto_combat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.auto_combat" title="Permalink to this definition">¶</a></dt>
+<dd><p>auto combat</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.cast_spell_battle">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">cast_spell_battle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#cast_spell_battle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.cast_spell_battle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose a spell. Its id is its position in the book, starting from 0, and not within the overall magic
+(If you have 3 spells of tier 1, 2 and 3 then tier 3 spell has id=2,
+because it lies on the 3rd position in the book)
+The spell is not played on the battlefield, its only chosen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> – (int) spell id</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.default_spell_book_position">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">default_spell_book_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#default_spell_book_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.default_spell_book_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns to the leftmost page of the spellbook</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.defend">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">defend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#defend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.defend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.fight_log">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">fight_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#fight_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.fight_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>fight log</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.move_mouse_and_click_battle">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">move_mouse_and_click_battle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#move_mouse_and_click_battle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.move_mouse_and_click_battle" title="Permalink to this definition">¶</a></dt>
+<dd><p>move mouse and click during battle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x coord</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y coord</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.move_mouse_to_tile">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">move_mouse_to_tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#move_mouse_to_tile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.move_mouse_to_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>move mouse to tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x coord</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y coord</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.move_to_portrait">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">move_to_portrait</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">number</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#move_to_portrait"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.move_to_portrait" title="Permalink to this definition">¶</a></dt>
+<dd><p>move mouse to portrait in a queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>number</strong> – hero number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.move_to_tile">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">move_to_tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#move_to_tile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.move_to_tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Top left corner is the (0, 0) point.
+Adding x moves the chosen tile to the right, adding y moves it downwards</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>int</em>) – x coord</p></li>
+<li><p><strong>y</strong> (<em>int</em>) – y coord</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.options">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">options</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>click options</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.quick_combat">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">quick_combat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#quick_combat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.quick_combat" title="Permalink to this definition">¶</a></dt>
+<dd><p>quick combat</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.retreat">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">retreat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#retreat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.retreat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.show_current_unit_stats">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">show_current_unit_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#show_current_unit_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.show_current_unit_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>show unit stats</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.show_heroes_stats">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">show_heroes_stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#show_heroes_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.show_heroes_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>show hero stats</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.show_hide_queue">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">show_hide_queue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#show_hide_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.show_hide_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>show or hide queue</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.spell_book">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">spell_book</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#spell_book"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.spell_book" title="Permalink to this definition">¶</a></dt>
+<dd><p>go into spell book</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.surrender">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">surrender</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#surrender"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.surrender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="BattleGUI.wait">
+<span class="sig-prename descclassname"><span class="pre">BattleGUI.</span></span><span class="sig-name descname"><span class="pre">wait</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/BattleGUI.html#wait"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#BattleGUI.wait" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/BattleGUI.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+value\_change\_algorithm module
+===============================
+
+.. automodule:: value_change_algorithm
+   :members:
+   :undoc-members:
+   :show-inheritance:

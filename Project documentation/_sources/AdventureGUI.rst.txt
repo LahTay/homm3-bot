@@ -1,0 +1,7 @@
+AdventureGUI module
+===================
+
+.. automodule:: AdventureGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:

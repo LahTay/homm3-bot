@@ -1,0 +1,7 @@
+ocr\_dict module
+================
+
+.. automodule:: ocr_dict
+   :members:
+   :undoc-members:
+   :show-inheritance:

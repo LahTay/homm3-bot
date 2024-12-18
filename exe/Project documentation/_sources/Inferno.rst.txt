@@ -1,0 +1,7 @@
+Inferno module
+==============
+
+.. automodule:: Inferno
+   :members:
+   :undoc-members:
+   :show-inheritance:

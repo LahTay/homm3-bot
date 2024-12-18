@@ -1,0 +1,7 @@
+battle\_image\_processing module
+================================
+
+.. automodule:: battle_image_processing
+   :members:
+   :undoc-members:
+   :show-inheritance:

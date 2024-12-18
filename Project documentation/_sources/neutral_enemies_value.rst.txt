@@ -1,0 +1,7 @@
+neutral\_enemies\_value module
+==============================
+
+.. automodule:: neutral_enemies_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

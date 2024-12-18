@@ -1,0 +1,7 @@
+stronghold\_upgrade module
+==========================
+
+.. automodule:: stronghold_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

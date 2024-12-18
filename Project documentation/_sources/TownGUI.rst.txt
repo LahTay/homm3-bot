@@ -1,0 +1,7 @@
+TownGUI module
+==============
+
+.. automodule:: TownGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:

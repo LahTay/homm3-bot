@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>ok_detection module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-ok_detection">
+<span id="ok-detection-module"></span><h1>ok_detection module<a class="headerlink" href="#module-ok_detection" title="Permalink to this heading">¶</a></h1>
+<p>Script containing okay button detection, which helps us with handling windows</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ok_detection.check_ok">
+<span class="sig-prename descclassname"><span class="pre">ok_detection.</span></span><span class="sig-name descname"><span class="pre">check_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ok_detection.html#check_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ok_detection.check_ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function responsible for detecting if there is an okay on the screen. Crucial in window handling.
+:return: 0 - no okay button, 1 - green okay button, 2 - grey okay button, 3 - skill okay button, 4 - city okay button</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ok_detection.compare">
+<span class="sig-prename descclassname"><span class="pre">ok_detection.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ok_detection.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ok_detection.compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single function to detect if the best match image is exact same as we need
+:param result: image of the best match
+:param result_image: stock image (e.g. battle_result.png)
+:param image: screenshot
+:return: returning 1 if its exact the same</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/ok_detection.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

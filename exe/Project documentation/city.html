@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>city module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-city">
+<span id="city-module"></span><h1>city module<a class="headerlink" href="#module-city" title="Permalink to this heading">¶</a></h1>
+<p>Script containing city class representing casles in the game</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="city.City">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">city.</span></span><span class="sig-name descname"><span class="pre">City</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mage_guild:</span> <span class="pre">~data.building.MageGuild</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fort:</span> <span class="pre">~data.building.Fort</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">city_hall:</span> <span class="pre">~data.building.CityHall</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tavern:</span> <span class="pre">~data.building.Tavern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marketplace:</span> <span class="pre">~data.building.Marketplace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_silo:</span> <span class="pre">~data.building.ResourceSilo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blacksmith:</span> <span class="pre">~data.building.Building</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">graal:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">upper_hero:</span> <span class="pre">~data.hero.Hero</span> <span class="pre">=</span> <span class="pre">&lt;data.hero.Hero</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lower_hero:</span> <span class="pre">~data.hero.Hero</span> <span class="pre">=</span> <span class="pre">&lt;data.hero.Hero</span> <span class="pre">object&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">owned_by:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'neutral'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mage_guild</strong> (<em>MageGuild</em>) – </p></li>
+<li><p><strong>fort</strong> (<em>Fort</em>) – </p></li>
+<li><p><strong>city_hall</strong> (<em>CityHall</em>) – </p></li>
+<li><p><strong>tavern</strong> (<em>Tavern</em>) – </p></li>
+<li><p><strong>marketplace</strong> (<em>Marketplace</em>) – </p></li>
+<li><p><strong>resource_silo</strong> (<em>ResourceSilo</em>) – </p></li>
+<li><p><strong>blacksmith</strong> (<em>Building</em>) – </p></li>
+<li><p><strong>graal</strong> (<em>bool</em>) – </p></li>
+<li><p><strong>upper_hero</strong> (<em>Hero</em>) – </p></li>
+<li><p><strong>lower_hero</strong> (<em>Hero</em>) – </p></li>
+<li><p><strong>owned_by</strong> (<em>str</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hero</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>Action buffer function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>player</strong> – player object</p></li>
+<li><p><strong>hero</strong> – hero object</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.check_color">
+<span class="sig-name descname"><span class="pre">check_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.check_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.check_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks background color of an image where the text is.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>one of four strings: ‘green’, ‘yellow’, ‘red’, ‘gray’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_blacksmith">
+<span class="sig-name descname"><span class="pre">crop_blacksmith</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_blacksmith"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_blacksmith" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps blacksmith</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_citadel">
+<span class="sig-name descname"><span class="pre">crop_citadel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_citadel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_citadel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps citadel</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_city_hall">
+<span class="sig-name descname"><span class="pre">crop_city_hall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_city_hall"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_city_hall" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps city hall</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t1">
+<span class="sig-name descname"><span class="pre">crop_t1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier one unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t2">
+<span class="sig-name descname"><span class="pre">crop_t2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier two unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t3">
+<span class="sig-name descname"><span class="pre">crop_t3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t3" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier three unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t4">
+<span class="sig-name descname"><span class="pre">crop_t4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier four unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t5">
+<span class="sig-name descname"><span class="pre">crop_t5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier five unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t6">
+<span class="sig-name descname"><span class="pre">crop_t6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t6" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier six unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_t7">
+<span class="sig-name descname"><span class="pre">crop_t7</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_t7"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_t7" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tier seven unit building</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.crop_tavern">
+<span class="sig-name descname"><span class="pre">crop_tavern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.crop_tavern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.crop_tavern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cropps tavern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>image with text and color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.end_day">
+<span class="sig-name descname"><span class="pre">end_day</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.end_day"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.end_day" title="Permalink to this definition">¶</a></dt>
+<dd><p>Buffer function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.give_text_and_color">
+<span class="sig-name descname"><span class="pre">give_text_and_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.give_text_and_color"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.give_text_and_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns text and color of the text’s background.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>name, color</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.read_text">
+<span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.read_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.read_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads text from an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img</strong> – input image</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>read text</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="city.City.take_screenshot">
+<span class="sig-name descname"><span class="pre">take_screenshot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/city.html#City.take_screenshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#city.City.take_screenshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a screenshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>screenshot image</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/city.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

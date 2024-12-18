@@ -1,0 +1,7 @@
+necropolis\_upgrade module
+==========================
+
+.. automodule:: necropolis_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

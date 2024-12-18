@@ -1,0 +1,7 @@
+conflux\_upgrade module
+=======================
+
+.. automodule:: conflux_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

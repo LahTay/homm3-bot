@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>reward module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-reward">
+<span id="reward-module"></span><h1>reward module<a class="headerlink" href="#module-reward" title="Permalink to this heading">¶</a></h1>
+<p>Script containing classes and functions handling our reward system</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="reward.Reward">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">Reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BattleEnv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.calcPath">
+<span class="sig-name descname"><span class="pre">calcPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">startPoint</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endPoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.calcPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.calcPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Incomplete A* algorithm to compute real cost of a move/ speed required to move</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>startPoint</strong> – Starting point</p></li>
+<li><p><strong>endPoint</strong> – End point</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Length of the path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.calcReward">
+<span class="sig-name descname"><span class="pre">calcReward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">BattleEnv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.calcReward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.calcReward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that calculates the reward</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnit</strong> – Current unit</p></li>
+<li><p><strong>BattleEnv</strong> – Battle enviroment class</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>reward, result of the battle</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.checkRanged">
+<span class="sig-name descname"><span class="pre">checkRanged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unitIsAlly</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.checkRanged"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.checkRanged" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate % of protected ranged allies</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>unitIsAlly</strong> – Boolean whether unit is allied or not</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>% of protected archers, % of blocked archers, % of released archers</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.damageDealt">
+<span class="sig-name descname"><span class="pre">damageDealt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isTeamAlly</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.damageDealt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.damageDealt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates damage dealt</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnit</strong> – currentUnit</p></li>
+<li><p><strong>isTeamAlly</strong> – (Boolean) True-&gt; allied, False -&gt; not allied</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>stored HP - current HP</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.getTeamHP">
+<span class="sig-name descname"><span class="pre">getTeamHP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isTeamAlly</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.getTeamHP"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.getTeamHP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Summing up all of the hp of the given team.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnit</strong> – Current handled unit</p></li>
+<li><p><strong>isTeamAlly</strong> – Checking whether team is allied or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Summed hp of the team.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.opponentDistances">
+<span class="sig-name descname"><span class="pre">opponentDistances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnitPos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.opponentDistances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.opponentDistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate distance to opponents
+Temporally using queue since its currently a list of creatures on the battle field</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnitPos</strong> – Position of units</p></li>
+<li><p><strong>side</strong> (<em>str</em>) – “ally” or “enemy”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>% of our units in range to an opponent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.retaliationTaken">
+<span class="sig-name descname"><span class="pre">retaliationTaken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">health</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.retaliationTaken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.retaliationTaken" title="Permalink to this definition">¶</a></dt>
+<dd><p>See if unit suffered from enemy’s retaliation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>health</strong> – health of the unit</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1 - Taken, 0 - not taken</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.saveUnitHealth">
+<span class="sig-name descname"><span class="pre">saveUnitHealth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnit</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.saveUnitHealth"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.saveUnitHealth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updating unit’s health before moving</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>currUnit</strong> – Current handled unit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.unitsInQueue">
+<span class="sig-name descname"><span class="pre">unitsInQueue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currQueue</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.unitsInQueue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.unitsInQueue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counting % of allies and enemies still in queue</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>currQueue</strong> – Queue</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>% of allies in queue, % of enemies in queue</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.unitsInRange">
+<span class="sig-name descname"><span class="pre">unitsInRange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnitPos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitIsAlly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkedSide</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.unitsInRange"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.unitsInRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate % of units our unit is reaching</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnitPos</strong> – tuple - current position of our unit</p></li>
+<li><p><strong>speed</strong> – int - speed of our unit</p></li>
+<li><p><strong>unitIsAlly</strong> – bool - information whether our unit is an ally or enemy</p></li>
+<li><p><strong>checkedSide</strong> (<em>str</em>) – str - information which side of units are we checking</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>float - % of units our unit is reaching</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.unitsReaching">
+<span class="sig-name descname"><span class="pre">unitsReaching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currUnitPos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unitIsAlly</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkedSide</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.unitsReaching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.unitsReaching" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate % of units reaching our unit</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>currUnitPos</strong> – Position of units on the battlfield</p></li>
+<li><p><strong>unitIsAlly</strong> – Is a unit an ally</p></li>
+<li><p><strong>checkedSide</strong> (<em>str</em>) – :”ally” or “enemy”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>% of units reaching our unit</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Reward.updateEnv">
+<span class="sig-name descname"><span class="pre">updateEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">BattleEnv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Reward.updateEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Reward.updateEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates battle environment and the queue.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>BattleEnv</strong> – Battle environment class</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="reward.Tile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">Tile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Tile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reward.Tile.createAdjacentTiles">
+<span class="sig-name descname"><span class="pre">createAdjacentTiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">neighbours</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#Tile.createAdjacentTiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.Tile.createAdjacentTiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates adjacent tiles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>neighbours</strong> – neighbour tiles of the tile</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reward.contains">
+<span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">container</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#contains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.contains" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to check if container contains an item</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>container</strong> – Container</p></li>
+<li><p><strong>item</strong> – An item</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True or False</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reward.cubeDistance">
+<span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">cubeDistance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#cubeDistance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.cubeDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate distance between points in 3D space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point1</strong> – list - coordinates [x,y,z]</p></li>
+<li><p><strong>point2</strong> – list - coordinates [x,y,z]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>int - distance between 2 points</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reward.hexDist">
+<span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">hexDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#hexDist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.hexDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates distance between 2 hexes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point1</strong> – 2D offset coordinates (x, y)</p></li>
+<li><p><strong>point2</strong> – 2D offset coordinates (x, y)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cube distance between two hexes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reward.offsetToCube">
+<span class="sig-prename descclassname"><span class="pre">reward.</span></span><span class="sig-name descname"><span class="pre">offsetToCube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reward.html#offsetToCube"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reward.offsetToCube" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change offset coordinates to cubic coordinates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>point</strong> – tuple - 2D offset coordinates (x, y)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list - coordinates [x,y,z]</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/reward.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+creature module
+===============
+
+.. automodule:: creature
+   :members:
+   :undoc-members:
+   :show-inheritance:

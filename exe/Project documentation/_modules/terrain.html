@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>terrain &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for terrain</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script containing several dataclasses representing terrain/fog of war&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<div class="viewcode-block" id="Terrain"><a class="viewcode-back" href="../terrain.html#terrain.Terrain">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Terrain</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Terrain dataclass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">native</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># placeholders for end ow week/day function</span>
+
+<div class="viewcode-block" id="Terrain.end_day"><a class="viewcode-back" href="../terrain.html#terrain.Terrain.end_day">[docs]</a>    <span class="k">def</span> <span class="nf">end_day</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the day</span>
+<span class="sd">        :param player: Player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Terrain.end_week"><a class="viewcode-back" href="../terrain.html#terrain.Terrain.end_week">[docs]</a>    <span class="k">def</span> <span class="nf">end_week</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the week</span>
+<span class="sd">        :param player: Player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Terrain.action"><a class="viewcode-back" href="../terrain.html#terrain.Terrain.action">[docs]</a>    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An action function that is required for agent movement</span>
+<span class="sd">        :param player: Player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+
+<div class="viewcode-block" id="Water_"><a class="viewcode-back" href="../terrain.html#terrain.Water_">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Water_</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Water dataclass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">need_ship</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">move_cost</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Water&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># placeholders for end ow week/day function</span>
+
+<div class="viewcode-block" id="Water_.end_day"><a class="viewcode-back" href="../terrain.html#terrain.Water_.end_day">[docs]</a>    <span class="k">def</span> <span class="nf">end_day</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the day</span>
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Water_.end_week"><a class="viewcode-back" href="../terrain.html#terrain.Water_.end_week">[docs]</a>    <span class="k">def</span> <span class="nf">end_week</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the week</span>
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Water_.action"><a class="viewcode-back" href="../terrain.html#terrain.Water_.action">[docs]</a>    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An action function that is required for agent movement</span>
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="FogOfWar"><a class="viewcode-back" href="../terrain.html#terrain.FogOfWar">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">FogOfWar</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fog of war dataclass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;fow&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># placeholders for end ow week/day function</span>
+
+<div class="viewcode-block" id="FogOfWar.end_day"><a class="viewcode-back" href="../terrain.html#terrain.FogOfWar.end_day">[docs]</a>    <span class="k">def</span> <span class="nf">end_day</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the day</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FogOfWar.end_week"><a class="viewcode-back" href="../terrain.html#terrain.FogOfWar.end_week">[docs]</a>    <span class="k">def</span> <span class="nf">end_week</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the week</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="FogOfWar.action"><a class="viewcode-back" href="../terrain.html#terrain.FogOfWar.action">[docs]</a>    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An action function that is required for agent movement</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="Obstacle"><a class="viewcode-back" href="../terrain.html#terrain.Obstacle">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Obstacle</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Obstacle dataclass&quot;&quot;&quot;</span>
+    <span class="n">passable</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1000000</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;obstacle&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="c1"># placeholders for end ow week/day function</span>
+
+<div class="viewcode-block" id="Obstacle.end_day"><a class="viewcode-back" href="../terrain.html#terrain.Obstacle.end_day">[docs]</a>    <span class="k">def</span> <span class="nf">end_day</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the week</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Obstacle.end_week"><a class="viewcode-back" href="../terrain.html#terrain.Obstacle.end_week">[docs]</a>    <span class="k">def</span> <span class="nf">end_week</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Placeholder function for the end of the week</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Obstacle.action"><a class="viewcode-back" href="../terrain.html#terrain.Obstacle.action">[docs]</a>    <span class="k">def</span> <span class="nf">action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        An action function that is required for agent movement</span>
+
+<span class="sd">        :param player: player object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+<span class="n">fow</span> <span class="o">=</span> <span class="n">FogOfWar</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">Grass</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Grass&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Castle&quot;</span><span class="p">,</span> <span class="s2">&quot;Rampart&quot;</span><span class="p">])</span>
+<span class="n">Highlands</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Highlands&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Conflux&quot;</span><span class="p">])</span>
+<span class="n">Dirt</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Dirt&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Necropolis&quot;</span><span class="p">])</span>
+<span class="n">Lava</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Lava&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Inferno&quot;</span><span class="p">])</span>
+<span class="n">Subterranean</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Subterranean&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Dungeon&quot;</span><span class="p">])</span>
+<span class="n">Rough</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Rough&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Stronghold&quot;</span><span class="p">])</span>
+<span class="n">Wasteland</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Wasteland&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Sand</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Sand&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Snow</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Snow&quot;</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Tower&quot;</span><span class="p">])</span>
+<span class="n">Swamp</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Swamp&quot;</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Fortress&quot;</span><span class="p">,</span> <span class="s2">&quot;Cove&quot;</span><span class="p">])</span>
+<span class="n">Water</span> <span class="o">=</span> <span class="n">Water_</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">Rock</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">()</span>
+<span class="n">Obstacle_terr</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">()</span>
+<span class="n">Magic_Plains</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Magic_Plains&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Cursed_Ground</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Cursed_Ground&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Rockland</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Rockland&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Fiery_Fields</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Fiery_Fields&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Lucid_Pools</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Lucid_Pools&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Magic_Clouds</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Magic_Clouds&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Holy_Ground</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Holy_Ground&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Evil_Fog</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Evil_Fog&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Clover_Field</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Clover_Field&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Favorable_Winds</span> <span class="o">=</span> <span class="n">Water_</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="mi">66</span><span class="p">)</span>
+<span class="n">Cracked_Ice</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Cracked_Ice&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Dunes</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Dunes&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Fields_of_Glory</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Fields_of_Glory&quot;</span><span class="p">,</span> <span class="mi">125</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Dirt_Road</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Dirt_Road&quot;</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Gravel_Road</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Gravel_Road&quot;</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="p">[])</span>
+<span class="n">Cobblestone_Road</span> <span class="o">=</span> <span class="n">Terrain</span><span class="p">(</span><span class="s2">&quot;Cobblestone_Road&quot;</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="p">[])</span>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,7 @@
+reward module
+=============
+
+.. automodule:: reward
+   :members:
+   :undoc-members:
+   :show-inheritance:

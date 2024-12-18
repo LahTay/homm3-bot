@@ -1,0 +1,7 @@
+mines\_and\_resources\_value module
+===================================
+
+.. automodule:: mines_and_resources_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

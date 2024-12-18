@@ -1,0 +1,7 @@
+habitats\_on\_map module
+========================
+
+.. automodule:: habitats_on_map
+   :members:
+   :undoc-members:
+   :show-inheritance:

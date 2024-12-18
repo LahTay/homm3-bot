@@ -1,0 +1,7 @@
+enemy\_castle module
+====================
+
+.. automodule:: enemy_castle
+   :members:
+   :undoc-members:
+   :show-inheritance:

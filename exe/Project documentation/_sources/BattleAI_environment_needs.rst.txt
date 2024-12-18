@@ -1,0 +1,7 @@
+BattleAI\_environment\_needs module
+===================================
+
+.. automodule:: BattleAI_environment_needs
+   :members:
+   :undoc-members:
+   :show-inheritance:

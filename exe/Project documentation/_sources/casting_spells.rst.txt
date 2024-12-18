@@ -1,0 +1,7 @@
+casting\_spells module
+======================
+
+.. automodule:: casting_spells
+   :members:
+   :undoc-members:
+   :show-inheritance:

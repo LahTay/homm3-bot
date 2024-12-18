@@ -1,0 +1,7 @@
+adventure\_image\_processing module
+===================================
+
+.. automodule:: adventure_image_processing
+   :members:
+   :undoc-members:
+   :show-inheritance:

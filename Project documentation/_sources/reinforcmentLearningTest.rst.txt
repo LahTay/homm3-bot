@@ -1,0 +1,7 @@
+reinforcmentLearningTest module
+===============================
+
+.. automodule:: reinforcmentLearningTest
+   :members:
+   :undoc-members:
+   :show-inheritance:

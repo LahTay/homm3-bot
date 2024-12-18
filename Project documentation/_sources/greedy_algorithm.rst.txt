@@ -1,0 +1,7 @@
+greedy\_algorithm module
+========================
+
+.. automodule:: greedy_algorithm
+   :members:
+   :undoc-members:
+   :show-inheritance:

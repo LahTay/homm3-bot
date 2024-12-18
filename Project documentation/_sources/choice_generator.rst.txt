@@ -1,0 +1,7 @@
+choice\_generator module
+========================
+
+.. automodule:: choice_generator
+   :members:
+   :undoc-members:
+   :show-inheritance:

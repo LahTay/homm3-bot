@@ -1,0 +1,7 @@
+Dungeon module
+==============
+
+.. automodule:: Dungeon
+   :members:
+   :undoc-members:
+   :show-inheritance:

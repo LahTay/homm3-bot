@@ -1,0 +1,7 @@
+tower\_upgrade module
+=====================
+
+.. automodule:: tower_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

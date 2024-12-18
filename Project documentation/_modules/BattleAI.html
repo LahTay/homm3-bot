@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BattleAI &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for BattleAI</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">from</span> <span class="nn">mss</span> <span class="kn">import</span> <span class="n">mss</span>
+<span class="kn">from</span> <span class="nn">battleAI.reinforcmentLearningTest</span> <span class="kn">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">divideIntoAllyAndEnemy</span>
+<span class="kn">from</span> <span class="nn">data.BattleAI_environment_needs</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">image_processing.battle_image_processing</span> <span class="kn">import</span> <span class="n">mouse_unit_check</span><span class="p">,</span> <span class="n">check_terrain</span><span class="p">,</span> <span class="n">initialize_BNN</span><span class="p">,</span> <span class="n">initialize_QNN</span><span class="p">,</span> \
+    <span class="n">ScreenStorage</span><span class="p">,</span> <span class="n">checkIfTurnIsOurs</span><span class="p">,</span> <span class="n">checkForObstacle</span>
+<span class="kn">from</span> <span class="nn">battleAI.deepQlearning</span> <span class="kn">import</span> <span class="n">DQNAgent</span><span class="p">,</span> <span class="n">policy</span>
+<span class="kn">from</span> <span class="nn">GUI_handling.BattleGUI</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span> <span class="k">as</span> <span class="nn">rd</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">mouse</span>
+<span class="kn">import</span> <span class="nn">keyboard</span> <span class="k">as</span> <span class="nn">kb</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">data.hero_specialities</span> <span class="kn">import</span> <span class="n">specialities</span>
+<span class="kn">from</span> <span class="nn">data.casting_spells</span> <span class="kn">import</span> <span class="n">Use_magic</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="s1">&#39;../&#39;</span><span class="p">)</span>
+<span class="c1"># This class is helpful in connecting creatures detected by neural network with creatures in queue</span>
+<div class="viewcode-block" id="CreatureMove"><a class="viewcode-back" href="../BattleAI.html#BattleAI.CreatureMove">[docs]</a><span class="k">class</span> <span class="nc">CreatureMove</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">detectedMob</span><span class="p">:</span> <span class="n">CreatureBox</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">detectedInstance</span> <span class="o">=</span> <span class="n">detectedMob</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fromQueueInstance</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candidates</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list with queue indexes of candidates</span>
+
+<div class="viewcode-block" id="CreatureMove.findCandidates"><a class="viewcode-back" href="../BattleAI.html#BattleAI.CreatureMove.findCandidates">[docs]</a>    <span class="k">def</span> <span class="nf">findCandidates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queue</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">queue</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">mob</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">mob</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">detectedInstance</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">candidates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span> <span class="o">-</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="fitted"><a class="viewcode-back" href="../BattleAI.html#BattleAI.fitted">[docs]</a><span class="k">def</span> <span class="nf">fitted</span><span class="p">(</span><span class="n">mobs</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">mob</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="take_whole_queue"><a class="viewcode-back" href="../BattleAI.html#BattleAI.take_whole_queue">[docs]</a><span class="k">def</span> <span class="nf">take_whole_queue</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes screenshot of the entire queue</span>
+
+<span class="sd">    :return: np.array - screenshot of the entire queue</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">779</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">662</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">15</span><span class="o">*</span><span class="mi">40</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">38</span><span class="p">}</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">screen</span></div>
+
+
+<div class="viewcode-block" id="bookAvailable"><a class="viewcode-back" href="../BattleAI.html#BattleAI.bookAvailable">[docs]</a><span class="k">def</span> <span class="nf">bookAvailable</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if we can use the spell or not</span>
+
+<span class="sd">    :return: bool - True if available, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">book_available</span> <span class="o">=</span> <span class="mi">85</span>     <span class="c1"># mean value of spell book icon when it&#39;s possible to use it</span>
+    <span class="n">book_used</span> <span class="o">=</span> <span class="mi">57</span>          <span class="c1"># mean value of spell book icon when it&#39;s not possible to use it</span>
+
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">780</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">1311</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">46</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">37</span><span class="p">}</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGBA2BGR</span><span class="p">)</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">screen</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mean</span> <span class="o">-</span> <span class="n">book_available</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mean</span> <span class="o">-</span> <span class="n">book_used</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="arePicturesTheSame"><a class="viewcode-back" href="../BattleAI.html#BattleAI.arePicturesTheSame">[docs]</a><span class="k">def</span> <span class="nf">arePicturesTheSame</span><span class="p">(</span><span class="n">pictureA</span><span class="p">,</span> <span class="n">pictureB</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if pictures are exactly the same</span>
+
+<span class="sd">    :param pictureA: np.array - image</span>
+<span class="sd">    :param pictureB: np.array - image</span>
+<span class="sd">    :return: bool - are pictures the same</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="ow">not</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bitwise_xor</span><span class="p">(</span><span class="n">pictureA</span><span class="p">,</span> <span class="n">pictureB</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="arePicturesSimilar"><a class="viewcode-back" href="../BattleAI.html#BattleAI.arePicturesSimilar">[docs]</a><span class="k">def</span> <span class="nf">arePicturesSimilar</span><span class="p">(</span><span class="n">pictureA</span><span class="p">,</span> <span class="n">pictureB</span><span class="p">,</span> <span class="n">percent</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if pictures are similar</span>
+
+<span class="sd">    :param pictureA: np.array - image</span>
+<span class="sd">    :param pictureB: np.array - image</span>
+<span class="sd">    :param percent: float - acceptable percent of difference between pictures</span>
+<span class="sd">    :return: bool - are pictures similiar</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">truthTable</span> <span class="o">=</span> <span class="n">pictureA</span> <span class="o">==</span> <span class="n">pictureB</span>
+    <span class="n">truthTable</span> <span class="o">=</span> <span class="n">truthTable</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">difference</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">truthTable</span><span class="p">[</span><span class="n">truthTable</span><span class="o">==</span><span class="kc">False</span><span class="p">])</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">truthTable</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">difference</span> <span class="o">&lt;</span> <span class="n">percent</span><span class="o">/</span><span class="mi">100</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="take_side_window"><a class="viewcode-back" href="../BattleAI.html#BattleAI.take_side_window">[docs]</a><span class="k">def</span> <span class="nf">take_side_window</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Takes screenshot of the side window that pops up when we hover over enemy</span>
+
+<span class="sd">    :return: np.array - screenshot of the side window</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">492</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">1366</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">1441</span> <span class="o">-</span> <span class="mi">1366</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">777</span> <span class="o">-</span> <span class="mi">492</span><span class="p">}</span>
+    <span class="n">screen</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGBA2BGR</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">img</span></div>
+
+
+<div class="viewcode-block" id="checkIfStillAlive"><a class="viewcode-back" href="../BattleAI.html#BattleAI.checkIfStillAlive">[docs]</a><span class="k">def</span> <span class="nf">checkIfStillAlive</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    function checking if our environment is correctly assuming that enemy is still alive</span>
+<span class="sd">    If not we remove the enemy from environment</span>
+<span class="sd">    the 2nd output of this function is indicator whether or not the enviroment was changed</span>
+<span class="sd">    informing us if we should pick action once again</span>
+
+<span class="sd">    :param target: tuple - position of checked tile</span>
+<span class="sd">    :param state: 2D array of objects - current state of our environment</span>
+<span class="sd">    :return: 2D array of objects - state of our environment, bool - is the target dead</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">state</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="c1"># if unit decides to defend the target is None</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">target</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="c1"># if target tile is a creature we move cursor to the top left corner and capture element of the screen</span>
+    <span class="c1"># where enemy unit info appears after hovering a cursor over it. This will be our referecial image.</span>
+    <span class="c1"># Next we hover a mouse over the target tile and take shot of the same area on screen as before.</span>
+    <span class="c1"># Then we compare the 2 images. If they are the same then the tile doesn&#39;t contain creature so we need</span>
+    <span class="c1"># to update our environment else the creature is still there no need to update anything.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">CreatureBox</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+        <span class="n">mouse</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">reference</span> <span class="o">=</span> <span class="n">take_side_window</span><span class="p">()</span>
+        <span class="n">move_mouse_to_tile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">checked</span> <span class="o">=</span> <span class="n">take_side_window</span><span class="p">()</span>
+
+        <span class="c1"># unit already dead</span>
+        <span class="k">if</span> <span class="n">arePicturesSimilar</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="n">checked</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+            <span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;removed dead enemy from &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="debunkObstacles"><a class="viewcode-back" href="../BattleAI.html#BattleAI.debunkObstacles">[docs]</a><span class="k">def</span> <span class="nf">debunkObstacles</span><span class="p">(</span><span class="n">current_position</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">obstacles</span><span class="p">,</span> <span class="n">hex_img</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function removing false positives from detected obstacles</span>
+<span class="sd">    It works by moving mouse to current unit and pressing ctrl</span>
+<span class="sd">    to display it&#39;s possible moves as dark hexagrams</span>
+<span class="sd">    this allows us to make good threshold to get the tiles we can really move on</span>
+<span class="sd">    if our env assumes one of this tiles is an obstacles we correct that mistake</span>
+
+<span class="sd">    :param current_position: tuple - current position of our unit</span>
+<span class="sd">    :param state: 2D array of objects - current state of our environment</span>
+<span class="sd">    :param obstacles: list of instances of class Obstacle</span>
+<span class="sd">    :param hex_img: np.array - mask used in checking the possible moves</span>
+<span class="sd">    :return: state: 2D array of objects - current state of our environment,</span>
+<span class="sd">             obstacles: list of instances of class Obstacle</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">move_mouse_to_tile</span><span class="p">(</span><span class="n">current_position</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">current_position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s1">&#39;ctrl&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">306</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">618</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">1300</span> <span class="o">-</span> <span class="mi">618</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">775</span> <span class="o">-</span> <span class="mi">306</span><span class="p">}</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="n">kb</span><span class="o">.</span><span class="n">release</span><span class="p">(</span><span class="s1">&#39;ctrl&#39;</span><span class="p">)</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGBA2BGR</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">inRange</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">28</span><span class="p">))</span>
+    <span class="n">eroded</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_OPEN</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># pixel coords for the upper left corner of first tile in even row</span>
+    <span class="n">even_x</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="n">even_y</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># pixel coords for the upper left corner of first tile in odd row</span>
+    <span class="n">odd_x</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">odd_y</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c1"># size of tile&#39;s bounding box</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">43</span>
+<span class="c1"># amount of pixels to move when moving to the next row</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="mi">42</span>
+
+    <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">11</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">15</span><span class="p">):</span>
+            <span class="c1"># choosing coordinates depending on the row number parity</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">Y</span> <span class="o">=</span> <span class="n">odd_y</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">y</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="n">odd_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Y</span> <span class="o">=</span> <span class="n">even_y</span> <span class="o">+</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">y</span>
+                <span class="n">X</span> <span class="o">=</span> <span class="n">even_x</span> <span class="o">+</span> <span class="p">(</span><span class="n">h</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span>
+            <span class="c1"># checked window (fragment of the picture)</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">eroded</span><span class="p">[</span><span class="n">Y</span><span class="p">:</span><span class="n">Y</span> <span class="o">+</span> <span class="n">w</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span><span class="n">X</span> <span class="o">+</span> <span class="n">h</span><span class="p">]</span>
+            <span class="c1"># drawing window (for debugging)</span>
+            <span class="n">im</span> <span class="o">=</span> <span class="n">eroded</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">bb</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">),</span> <span class="p">(</span><span class="n">X</span> <span class="o">+</span> <span class="n">h</span><span class="p">,</span> <span class="n">Y</span> <span class="o">+</span> <span class="n">w</span><span class="p">),</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="c1"># number of white pixels in window</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bitwise_and</span><span class="p">(</span><span class="n">hex_img</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="n">whites</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">field</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">whites</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">140</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">],</span> <span class="n">Obstacle</span><span class="p">):</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;removed &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+                    <span class="n">state</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="n">obstacles</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">obstacles</span> <span class="k">if</span>
+                                          <span class="n">i</span><span class="o">.</span><span class="n">field</span> <span class="o">!=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">obstacles</span></div>
+
+
+<span class="c1"># Checks if the battle has ended by detecting if &quot;ok&quot; button has appeared</span>
+<div class="viewcode-block" id="checkIfEnd"><a class="viewcode-back" href="../BattleAI.html#BattleAI.checkIfEnd">[docs]</a><span class="k">def</span> <span class="nf">checkIfEnd</span><span class="p">(</span><span class="n">ok_button_img</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks if the battle has ended</span>
+
+<span class="sd">    :param ok_button_img: np.array - image of ok button to look for</span>
+<span class="sd">    :return: boot - has the battle ended</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="mi">765</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="mi">1109</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">1176</span> <span class="o">-</span> <span class="mi">1109</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">798</span> <span class="o">-</span> <span class="mi">765</span><span class="p">}</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGBA2RGB</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">arePicturesTheSame</span><span class="p">(</span><span class="n">ok_button_img</span><span class="p">,</span> <span class="n">img</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="getInitialAmmoDict"><a class="viewcode-back" href="../BattleAI.html#BattleAI.getInitialAmmoDict">[docs]</a><span class="k">def</span> <span class="nf">getInitialAmmoDict</span><span class="p">(</span><span class="n">units</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates dictionary of units ammunition to keep track of it</span>
+
+<span class="sd">    :param units: list of instances of class CreatureBox</span>
+<span class="sd">    :return: dictionary of units ammunition</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ammo_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">ammo</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">unit</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+            <span class="n">ammo_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">ammo</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">ammo_dict</span></div>
+
+
+<div class="viewcode-block" id="colorDistance"><a class="viewcode-back" href="../BattleAI.html#BattleAI.colorDistance">[docs]</a><span class="k">def</span> <span class="nf">colorDistance</span><span class="p">(</span><span class="n">checked</span><span class="p">,</span> <span class="n">reference</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the distance in color space between two colors</span>
+
+<span class="sd">    :param checked: 3 element list - checked color</span>
+<span class="sd">    :param reference: 3 element list - reference color</span>
+<span class="sd">    :return: distance in color space between two colors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">checked</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">reference</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">checked</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">reference</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">checked</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">reference</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="checkTerrainType"><a class="viewcode-back" href="../BattleAI.html#BattleAI.checkTerrainType">[docs]</a><span class="k">def</span> <span class="nf">checkTerrainType</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Checks whether the terrain we are fighting on is Grass or Dirt</span>
+
+<span class="sd">    :return: str - terrain we are fighting on</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dirt_terrain_color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">66</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">115</span><span class="p">]</span>
+    <span class="n">grass_terrain_color</span> <span class="o">=</span> <span class="p">[</span><span class="mi">24</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">82</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="mi">730</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">560</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mi">45</span>
+    <span class="n">monitor</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">h</span><span class="p">}</span>
+    <span class="n">terrain_snippet</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mss</span><span class="p">()</span><span class="o">.</span><span class="n">grab</span><span class="p">(</span><span class="n">monitor</span><span class="p">))</span>
+    <span class="n">mean_color_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">terrain_snippet</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">distance1</span> <span class="o">=</span> <span class="n">colorDistance</span><span class="p">(</span><span class="n">mean_color_value</span><span class="p">,</span> <span class="n">dirt_terrain_color</span><span class="p">)</span>
+    <span class="n">distance2</span> <span class="o">=</span> <span class="n">colorDistance</span><span class="p">(</span><span class="n">mean_color_value</span><span class="p">,</span> <span class="n">grass_terrain_color</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">distance1</span> <span class="o">&lt;</span> <span class="n">distance2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Dirt&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;Grass&quot;</span></div>
+
+
+<div class="viewcode-block" id="BattleAI"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI">[docs]</a><span class="k">class</span> <span class="nc">BattleAI</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 1. Loading battle agent model which will be making decisions</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="p">(</span><span class="s2">&quot;DQNAgent&quot;</span><span class="p">,</span> <span class="n">buffer_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">start_epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">min_epsilon</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># load model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">mod</span><span class="o">.</span><span class="n">load_weights</span><span class="p">(</span><span class="s2">&quot;./battleAI/battleModelplayer_weights.h5&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># 2. Initialize BattleNeuralNetwork and QueueNeuralNetwork which are processing image data from game and</span>
+        <span class="c1"># extrude information about game state from it</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bnn</span> <span class="o">=</span> <span class="n">initialize_BNN</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qnn</span> <span class="o">=</span> <span class="n">initialize_QNN</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">ScreenStorage</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spell_power</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># dictionary keeping track of ranged unit&#39;s ammo</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># array containing hexagram image needed in detecting obstacles</span>
+        <span class="c1">#self.hex_img = np.load(r&#39;./battleAI/hex.npy&#39;)</span>
+
+        <span class="c1"># 3. Initialize environment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="BattleAI.spellEffectInEnv"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.spellEffectInEnv">[docs]</a>    <span class="k">def</span> <span class="nf">spellEffectInEnv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell_target</span><span class="p">,</span> <span class="n">spell_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Applies speed effects in our environment</span>
+
+<span class="sd">        :param spell_target: tuple - coordinates of the target of our spell</span>
+<span class="sd">        :param spell_name:  str - name of the spell</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">speed_spells</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Haste&quot;</span><span class="p">,</span> <span class="s2">&quot;Prayer&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">spell_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">speed_spells</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Case if spell effects only 1 ally</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">prev_boost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">prev_boost</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">spell_name</span> <span class="o">==</span> <span class="s2">&quot;Haste&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;Air_Magic&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Air_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                            <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Air_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                            <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Air_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">5</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                        <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">prev_boost</span>
+
+            <span class="k">elif</span> <span class="n">spell_name</span> <span class="o">==</span> <span class="s2">&quot;Prayer&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;Water_Magic&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Water_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                            <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Water_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                            <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span><span class="p">[</span><span class="s2">&quot;Water_Magic&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">prev_boost</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)})</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="o">==</span> <span class="n">spell_target</span><span class="p">:</span>
+                        <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">prev_boost</span></div>
+
+<div class="viewcode-block" id="BattleAI.updateSpdBoosts"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.updateSpdBoosts">[docs]</a>    <span class="k">def</span> <span class="nf">updateSpdBoosts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prev_pos</span><span class="p">):</span>
+        <span class="n">mob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="c1"># unit that just moved</span>
+
+        <span class="c1"># if the mob is currently affected by a spell increasing speed</span>
+        <span class="k">if</span> <span class="n">prev_pos</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="c1"># take previous boost info</span>
+        <span class="n">prev_boost_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="p">[</span><span class="n">prev_pos</span><span class="p">]</span>
+        <span class="c1"># remove previous boost info from the dict</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">prev_pos</span><span class="p">)</span>
+        <span class="c1"># if the spell is still active (number of turns it should be active is equal to the spell power of our hero)</span>
+        <span class="c1"># we increase the number of turns it has been active</span>
+        <span class="k">if</span> <span class="n">prev_boost_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spell_power</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="p">(</span><span class="n">prev_boost_info</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">prev_boost_info</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">)})</span></div>
+
+<div class="viewcode-block" id="BattleAI.findObstacles"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.findObstacles">[docs]</a>    <span class="k">def</span> <span class="nf">findObstacles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="p">):</span>
+        <span class="n">obstaclesList</span> <span class="o">=</span> <span class="n">check_terrain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bnn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obstaclesList</span></div>
+
+<div class="viewcode-block" id="BattleAI.findUnits"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.findUnits">[docs]</a>    <span class="k">def</span> <span class="nf">findUnits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">unitsList</span> <span class="o">=</span> <span class="n">mouse_unit_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qnn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">)</span>
+        <span class="n">uList</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">unitsList</span><span class="p">)</span>
+        <span class="n">uList</span> <span class="o">=</span> <span class="p">[</span><span class="n">unit</span> <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">uList</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">unit</span><span class="p">,</span> <span class="nb">list</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">uList</span><span class="p">:</span>
+            <span class="c1"># Add bonus speed for native terrain</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">native_terrain</span><span class="p">:</span>
+                <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c1"># Add bonus speed for hero speciality</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero_name</span> <span class="ow">in</span> <span class="n">specialities</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">specialities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hero_name</span><span class="p">]:</span>
+                    <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="s2">&quot;Speed&quot;</span> <span class="ow">in</span> <span class="n">specialities</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">hero_name</span><span class="p">]:</span>
+                    <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+</span> <span class="mi">2</span>
+                <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed_boosts</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="n">unit</span><span class="o">.</span><span class="n">ally</span><span class="p">,</span> <span class="n">unit</span><span class="o">.</span><span class="n">quantity</span><span class="p">,</span> <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">speed</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">uList</span></div>
+
+<div class="viewcode-block" id="BattleAI.start"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setOfCreatures</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">setOfObstacles</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">setOfCreatures</span><span class="p">,</span> <span class="n">setOfObstacles</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BattleAI.simulateMoves"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.simulateMoves">[docs]</a>    <span class="k">def</span> <span class="nf">simulateMoves</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enemyCreatures</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">mobsInOrder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__fitDetectedCreaturesToQueueCreatures</span><span class="p">(</span><span class="n">enemyCreatures</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">mob</span> <span class="ow">in</span> <span class="n">mobsInOrder</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">moveCreature</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">detectedInstance</span><span class="o">.</span><span class="n">field</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__fitDetectedCreaturesToQueueCreatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enemyCreatures</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># Algorithm</span>
+        <span class="c1"># 1. Because we have information only about position we need to find all the creatures with the same name and</span>
+        <span class="c1"># ally from queue. These creatures are candidates for moving</span>
+        <span class="c1"># 2. We are searching for candidates for every enemy which was moved by opponent</span>
+        <span class="c1"># 3. Then we are eliminating most distant candidates (further than speed of the creature)</span>
+        <span class="c1"># 4. Then we look at moving possibilities and we are connecting everything in consistent whole</span>
+        <span class="c1"># resources        -&gt; mobs we need move to simulate opponent turn in proper order</span>
+        <span class="c1"># moves            -&gt; target positions we need mobs from resources to move on</span>
+        <span class="c1"># listOfCandidates -&gt; we need to find connection enemy-&gt;resource so listOfCandidates contains candidates for</span>
+        <span class="c1">#                     these connections</span>
+
+        <span class="c1"># 1. Initialise necessary structures and find candidates</span>
+        <span class="n">mobs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">enemy</span> <span class="ow">in</span> <span class="n">enemyCreatures</span><span class="p">:</span>
+            <span class="n">mob</span> <span class="o">=</span> <span class="n">CreatureMove</span><span class="p">(</span><span class="n">enemy</span><span class="p">)</span>
+            <span class="n">mob</span><span class="o">.</span><span class="n">findCandidates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">)</span>
+            <span class="n">mobs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mob</span><span class="p">)</span>
+
+        <span class="c1"># 2. FIRST REDUCING PROCESS: Reducing candidates by calculating possible moves and checking if candidate</span>
+        <span class="c1"># could reach target position</span>
+        <span class="k">for</span> <span class="n">mob</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Iterate through candidates to find who could reach position of detected creature</span>
+                <span class="n">candidates</span> <span class="o">=</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+                    <span class="n">possibleMoves</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">choosePossibleMoves</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="n">candidate</span><span class="p">])</span>  <span class="c1"># Get possible moves</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">possibleMoves</span><span class="p">[</span><span class="n">mob</span><span class="o">.</span><span class="n">detectedInstance</span><span class="o">.</span><span class="n">field</span><span class="p">]:</span>
+                        <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fitted</span><span class="p">(</span><span class="n">mobs</span><span class="p">):</span>
+            <span class="n">mobs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mobs</span>
+
+        <span class="c1"># 3. SECOND REDUCE PROCESS Connecting detected creatures who has only one candidate with this candidate and</span>
+        <span class="c1"># reduce these candidates from other candidates lists</span>
+        <span class="k">for</span> <span class="n">mob</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mobs</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span> <span class="o">==</span> <span class="n">mobs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">candidates</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="k">elif</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">candidates</span><span class="p">:</span>
+                        <span class="n">mobs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">candidates</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">fitted</span><span class="p">(</span><span class="n">mobs</span><span class="p">):</span>
+            <span class="n">mobs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mobs</span>
+
+        <span class="c1"># 4. THIRD REDUCE PROCESS We need to resolve some conflicts so firstly we check how many times candidate</span>
+        <span class="c1"># appear in the candidates list: if candidate appear only once we have to use it in place we found it</span>
+        <span class="c1"># When counting we can miss lists with length == 1</span>
+
+        <span class="c1"># 4.1 Fill counter: two dimensional because we want to remember where we can find this candidate</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">mob</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mobs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">candidateIdx</span> <span class="ow">in</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">counter</span><span class="p">[</span><span class="n">candidateIdx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">candidateIdx</span> <span class="ow">in</span> <span class="n">unit</span><span class="o">.</span><span class="n">candidates</span><span class="p">:</span>
+                                <span class="n">counter</span><span class="p">[</span><span class="n">candidateIdx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                                <span class="n">counter</span><span class="p">[</span><span class="n">candidateIdx</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="c1"># 4.2 Reduction phase</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pair</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">counter</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">mobs</span><span class="p">[</span><span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">fitted</span><span class="p">(</span><span class="n">mobs</span><span class="p">):</span>
+            <span class="n">mobs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mobs</span>
+
+        <span class="c1"># 5. FOURTH REDUCE PROCESS: last process is resolve conflicts with quantity of the stacks</span>
+        <span class="c1"># less quantity difference between stacks means that this is real one</span>
+        <span class="c1"># We will use counter from the previous reduce process. If under index counter is -1 we cant take this candidate</span>
+        <span class="k">for</span> <span class="n">mob</span> <span class="ow">in</span> <span class="n">mobs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># Calculate differences</span>
+                <span class="n">quantityDiffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">):</span>
+                    <span class="n">quantityDiffs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">detectedInstance</span><span class="o">.</span><span class="n">quantity</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="n">candidate</span><span class="p">]</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span>
+
+                <span class="c1"># Choose best candidate with minimum quantity difference</span>
+                <span class="n">minArg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">quantityDiffs</span><span class="p">)</span>
+                <span class="n">bestCandidateIdx</span> <span class="o">=</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="n">minArg</span><span class="p">]</span>
+
+                <span class="c1"># If it is accessible take it, if not take something other</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">counter</span><span class="p">[</span><span class="n">bestCandidateIdx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="c1"># If true take it</span>
+                        <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">bestCandidateIdx</span><span class="p">]</span>
+                        <span class="n">counter</span><span class="p">[</span><span class="n">bestCandidateIdx</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># If false remove this from candidate and find for new minimum quantity difference</span>
+                        <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">bestCandidateIdx</span><span class="p">)</span>
+                        <span class="n">quantityDiffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">quantityDiffs</span><span class="p">,</span> <span class="n">minArg</span><span class="p">)</span>
+                        <span class="n">minArg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">quantityDiffs</span><span class="p">)</span>
+                        <span class="n">bestCandidateIdx</span> <span class="o">=</span> <span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="n">minArg</span><span class="p">]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">counter</span><span class="p">[</span><span class="n">mob</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">mobs</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">candidates</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mobs</span>
+
+<div class="viewcode-block" id="BattleAI.makeMove"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.makeMove">[docs]</a>    <span class="k">def</span> <span class="nf">makeMove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="c1"># check if mob is ranged</span>
+        <span class="n">ranged_mob</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">mob</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">mob</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">ranged</span><span class="p">:</span>
+            <span class="c1"># check number of allies before attacking</span>
+            <span class="c1"># to determine later if the unit died after a move</span>
+            <span class="n">allies</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">divideIntoAllyAndEnemy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">)</span>
+            <span class="n">prev_ally_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">allies</span><span class="p">)</span>
+            <span class="n">ranged_mob</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># 1. Make sure last mob from queue is ours</span>
+        <span class="c1"># if mob.ally:</span>
+        <span class="c1"># Move creature in environment</span>
+        <span class="n">neighbour</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target</span><span class="p">,</span> <span class="n">neighbour</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">moveCreature</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">move</span><span class="p">()</span>
+
+        <span class="c1"># Move creature in game</span>
+        <span class="k">if</span> <span class="n">neighbour</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">move_to_tile</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">attack_enemy</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">neighbour</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ranged_mob</span><span class="p">:</span>
+            <span class="n">allies</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">divideIntoAllyAndEnemy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">)</span>
+            <span class="n">current_ally_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">allies</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ranged mob&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">current_ally_count</span> <span class="o">==</span> <span class="n">prev_ally_count</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;UPDATED THE DICT&quot;</span><span class="p">)</span>
+                <span class="c1"># remove previous mob ammo info from dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+                <span class="c1"># add new mob ammo info to dict</span>
+                <span class="n">mob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">:</span> <span class="n">mob</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">ammo</span><span class="p">})</span>
+            <span class="c1"># if mob died during moving</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># remove previous mob ammo info from dict</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BattleAI.getAction"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.getAction">[docs]</a>    <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets action from our agent</span>
+
+<span class="sd">        :param state: 3D array - represents current state of our environment</span>
+<span class="sd">        :return: tuple - chosen tile, current unit, actions probabilities calculated by our agent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">possibleMoves</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">choosePossibleMoves</span><span class="p">(</span><span class="n">mob</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">actIDX</span><span class="p">,</span> <span class="n">possibleIdxs</span><span class="p">,</span> <span class="n">actionsProbability</span> <span class="o">=</span> <span class="n">policy</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="p">,</span> <span class="n">possibleMoves</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mob</span><span class="p">,</span> <span class="n">actionsProbability</span></div>
+
+<div class="viewcode-block" id="BattleAI.getMoveFromNN"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.getMoveFromNN">[docs]</a>    <span class="k">def</span> <span class="nf">getMoveFromNN</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 1. Start turn to actualize possibleMoves and prepare input for battle model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">startTurn</span><span class="p">()</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">prepareInputForNN</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+
+        <span class="c1"># 2. Get actions probabilities and take the action with highest probability</span>
+
+        <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mob</span><span class="p">,</span> <span class="n">actionsProbability</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAction</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="c1"># 3. If it is not possible to click in the highest probability hex then get another highest probability move</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkPossibility</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mob</span><span class="p">):</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">:</span>
+                    <span class="n">actionsProbability</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">actionsProbability</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">100000.</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">actionsProbability</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">actionsProbability</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1000.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkPossibility</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">mob</span><span class="p">):</span>
+                    <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">printEnvironment</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;After While&quot;</span><span class="p">)</span>
+
+        <span class="n">target</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span> <span class="k">else</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">mob</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">:</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Choice &quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="s2">&quot;Curr Pos &quot;</span><span class="p">,</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">,</span> <span class="s2">&quot; move to &quot;</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">target</span></div>
+
+<div class="viewcode-block" id="BattleAI.checkPossibility"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.checkPossibility">[docs]</a>    <span class="k">def</span> <span class="nf">checkPossibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">mob</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">possibleMoves</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]:</span>  <span class="c1"># Basic condition (move has to be reachable)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not possible&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">elif</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span> <span class="ow">or</span> <span class="p">(</span><span class="n">mob</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">mob</span><span class="o">.</span><span class="n">field</span><span class="p">):</span>  <span class="c1"># Condition for wait/defense execution</span>
+            <span class="c1"># Wait is problematic, because of the possibility to make one wait per round</span>
+            <span class="c1"># that&#39;s why if this condition is met just defend</span>
+            <span class="n">defend</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Defend&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Break&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="BattleAI.skipEnemiesInQueue"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.skipEnemiesInQueue">[docs]</a>    <span class="k">def</span> <span class="nf">skipEnemiesInQueue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">move</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BattleAI.actualizeQueue"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.actualizeQueue">[docs]</a>    <span class="k">def</span> <span class="nf">actualizeQueue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">setOfCreatures</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">unit</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">setOfCreatures</span><span class="p">):</span>
+            <span class="c1"># update ammo info</span>
+            <span class="k">if</span> <span class="n">unit</span><span class="o">.</span><span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">unit</span><span class="o">.</span><span class="n">type</span><span class="o">.</span><span class="n">ammo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span><span class="p">[</span><span class="n">unit</span><span class="o">.</span><span class="n">field</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">unit</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BattleAI.fight"><a class="viewcode-back" href="../BattleAI.html#BattleAI.BattleAI.fight">[docs]</a>    <span class="k">def</span> <span class="nf">fight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero_name</span><span class="p">,</span> <span class="n">skills</span><span class="p">,</span> <span class="n">spell_power</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero_skills</span> <span class="o">=</span> <span class="n">skills</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero_name</span> <span class="o">=</span> <span class="n">hero_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spell_power</span> <span class="o">=</span> <span class="n">spell_power</span>
+        <span class="n">ok_button_img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;./battleAI/ok_button.png&#39;</span><span class="p">)</span>
+        <span class="c1"># --- FIRST TURN ---</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">checkIfTurnIsOurs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">terrain</span> <span class="o">=</span> <span class="n">checkTerrainType</span><span class="p">()</span>
+        <span class="c1"># Create new environment, skill all the enemies from queue and do first move</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findUnits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ammo_dict</span> <span class="o">=</span> <span class="n">getInitialAmmoDict</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">findObstacles</span><span class="p">(</span><span class="n">units</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">allowDying</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">skipEnemiesInQueue</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">printEnvironment</span><span class="p">()</span>
+
+        <span class="c1"># target = self.getMoveFromNN()</span>
+        <span class="c1"># Use_magic(self.env.queue.queue) # Using spell</span>
+        <span class="c1"># self.makeMove(target)</span>
+        <span class="c1"># ------------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">printEnvironment</span><span class="p">()</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Wait for the end odf the move</span>
+        <span class="n">run</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># ---- NEXT TURNS ----</span>
+        <span class="k">while</span> <span class="n">run</span><span class="p">:</span>
+            <span class="c1"># 1. Wait for our turn</span>
+            <span class="k">while</span> <span class="ow">not</span> <span class="n">checkIfTurnIsOurs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">checkIfEnd</span><span class="p">(</span><span class="n">ok_button_img</span><span class="p">):</span>
+                    <span class="n">run</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">move_mouse_and_click_battle</span><span class="p">(</span><span class="mi">1150</span><span class="p">,</span> <span class="mi">775</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">run</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="c1"># 2. When first mob in queue is not friendly we need to actualize environment (synchronize queue and game)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+                <span class="c1"># 2.1 When turn is ours, find units at the battlefield</span>
+                <span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findUnits</span><span class="p">()</span>
+
+                <span class="c1"># 2.2 Actualize environment and queue</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">resetEnv</span><span class="p">(</span><span class="n">units</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">obstacles</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">actualizeQueue</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">printEnvironment</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">bookAvailable</span><span class="p">():</span>
+                <span class="n">spell_target</span><span class="p">,</span> <span class="n">spell_name</span> <span class="o">=</span> <span class="n">Use_magic</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spellEffectInEnv</span><span class="p">(</span><span class="n">spell_target</span><span class="p">,</span> <span class="n">spell_name</span><span class="p">)</span>
+
+            <span class="c1"># 3. Choose and make move</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">ally</span><span class="p">:</span>
+                <span class="n">mouse</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">while</span> <span class="n">mouse</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># save queue image before moving</span>
+                <span class="n">queue_before</span> <span class="o">=</span> <span class="n">take_whole_queue</span><span class="p">()</span>
+
+                <span class="n">current_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">field</span>
+
+                <span class="n">possibleMoves</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">choosePossibleMoves</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">[</span><span class="n">current_position</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">obstacles</span> <span class="o">=</span> <span class="n">debunkObstacles</span><span class="p">(</span><span class="n">current_position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">obstacles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hex_img</span><span class="p">)</span>
+                <span class="n">changed</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">while</span> <span class="n">changed</span><span class="p">:</span>
+                    <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getMoveFromNN</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">changed</span> <span class="o">=</span> <span class="n">checkIfStillAlive</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">checkIfEnd</span><span class="p">(</span><span class="n">ok_button_img</span><span class="p">):</span>
+                        <span class="n">run</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">changed</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">makeMove</span><span class="p">(</span><span class="n">target</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateSpdBoosts</span><span class="p">(</span><span class="n">current_position</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="c1"># Wait for the end of the move</span>
+
+                <span class="c1"># check if the target we just attacked is still alive</span>
+                <span class="c1"># required in case we got additional turn after killing enemy</span>
+                <span class="c1"># because in this case the queue will change even though it didn&#39;t move</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">dead</span> <span class="o">=</span> <span class="n">checkIfStillAlive</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+                <span class="c1"># if the target died we need to scan the battle field again</span>
+                <span class="k">if</span> <span class="n">dead</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+                <span class="c1"># move mouse to the corner just to be sure it&#39;s not on queue or creature</span>
+                <span class="n">mouse</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">while</span> <span class="n">mouse</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span> <span class="o">!=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">pass</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># save queue image after moving</span>
+                <span class="n">queue_after</span> <span class="o">=</span> <span class="n">take_whole_queue</span><span class="p">()</span>
+                <span class="c1"># if we get additional turn undo moving the queue</span>
+                <span class="k">if</span> <span class="n">arePicturesSimilar</span><span class="p">(</span><span class="n">queue_before</span><span class="p">,</span> <span class="n">queue_after</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">undoMove</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">checkIfEnd</span><span class="p">(</span><span class="n">ok_button_img</span><span class="p">):</span>
+                    <span class="n">run</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">move_mouse_and_click_battle</span><span class="p">(</span><span class="mi">1150</span><span class="p">,</span> <span class="mi">775</span><span class="p">)</span>
+                    <span class="k">break</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">battleAI</span> <span class="o">=</span> <span class="n">BattleAI</span><span class="p">()</span>
+    <span class="n">battleAI</span><span class="o">.</span><span class="n">fight</span><span class="p">(</span><span class="s2">&quot;Brissa&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;Air_Magic&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span> <span class="mi">2</span><span class="p">)</span>
+
+
+
+
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

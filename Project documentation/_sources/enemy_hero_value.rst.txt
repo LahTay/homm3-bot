@@ -1,0 +1,7 @@
+enemy\_hero\_value module
+=========================
+
+.. automodule:: enemy_hero_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

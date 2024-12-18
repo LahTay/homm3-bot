@@ -1,0 +1,7 @@
+Rampart module
+==============
+
+.. automodule:: Rampart
+   :members:
+   :undoc-members:
+   :show-inheritance:

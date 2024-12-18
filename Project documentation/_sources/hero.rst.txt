@@ -1,0 +1,7 @@
+hero module
+===========
+
+.. automodule:: hero
+   :members:
+   :undoc-members:
+   :show-inheritance:

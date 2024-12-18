@@ -1,0 +1,7 @@
+miscFunc module
+===============
+
+.. automodule:: miscFunc
+   :members:
+   :undoc-members:
+   :show-inheritance:

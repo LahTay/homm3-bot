@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>reinforcmentLearningTest module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-reinforcmentLearningTest">
+<span id="reinforcmentlearningtest-module"></span><h1>reinforcmentLearningTest module<a class="headerlink" href="#module-reinforcmentLearningTest" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">Colors</span></span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Colors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Colors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Dataclass with defined colors of the text written in console. To use it just write
+print(Colors.&lt;name_of_color&gt; + text + Colors.ENDC). Colors.ENDC is necessary if we want back to the original color</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.BOLD">
+<span class="sig-name descname"><span class="pre">BOLD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[1m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.BOLD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.ENDC">
+<span class="sig-name descname"><span class="pre">ENDC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[0m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.ENDC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.FAIL">
+<span class="sig-name descname"><span class="pre">FAIL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[91m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.FAIL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.HEADER">
+<span class="sig-name descname"><span class="pre">HEADER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[95m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.HEADER" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.OKBLUE">
+<span class="sig-name descname"><span class="pre">OKBLUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[94m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.OKBLUE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.OKCYAN">
+<span class="sig-name descname"><span class="pre">OKCYAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[96m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.OKCYAN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.OKGREEN">
+<span class="sig-name descname"><span class="pre">OKGREEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[92m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.OKGREEN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.UNDERLINE">
+<span class="sig-name descname"><span class="pre">UNDERLINE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[4m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.UNDERLINE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Colors.WARNING">
+<span class="sig-name descname"><span class="pre">WARNING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'\x1b[93m'</span></em><a class="headerlink" href="#reinforcmentLearningTest.Colors.WARNING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setOfCreatures</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setOfObstacles</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.choosePossibleMoves">
+<span class="sig-name descname"><span class="pre">choosePossibleMoves</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mob</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CreatureBox</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.choosePossibleMoves"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.choosePossibleMoves" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function to execute appropriate possible moves evaluation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mob</strong> (<em>CreatureBox</em>) – (CreatureBox) - currently moving unit</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(np.array) 2D - non-zero elements are the tiles the unit can move on, (np.array) 2D - non-zero elements are the tiles the unit can move on limited to only those we allow it to move on</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.moveCreature">
+<span class="sig-name descname"><span class="pre">moveCreature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexField</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.moveCreature"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.moveCreature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates the move of a unit. Executes proper action depending on chosen tile</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexField</strong> (<em>tuple</em>) – (tuple) - indices of chosen tile to move on</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(tuple) - indices of chosen tile to move on. (str) side of the attack target we attack it from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.prepareInputForNN">
+<span class="sig-name descname"><span class="pre">prepareInputForNN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currPos</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.prepareInputForNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.prepareInputForNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input for neural network preparation
+Form (x, y, z)
+x, y: coordinates of the hex
+z: features of the hex (current hero/hero/obstacle/empty hex, num of creatures at the hex,
+attack, hp, speed, ammo)
+stats are negative for hostile creatures
+stats are zero for empty hex</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(np.array) 3D - input for neural network</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.printEnvironment">
+<span class="sig-name descname"><span class="pre">printEnvironment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.printEnvironment"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.printEnvironment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints our environment state in console</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.resetEnv">
+<span class="sig-name descname"><span class="pre">resetEnv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setOfCreatures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setOfObstacles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.resetEnv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.resetEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which resets the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>setOfCreatures</strong> (<em>list</em>) – list with all the creatures at the battlefield</p></li>
+<li><p><strong>setOfObstacles</strong> (<em>list</em>) – list with all the obstacles at the battlefield</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.Environment.startTurn">
+<span class="sig-name descname"><span class="pre">startTurn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#Environment.startTurn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.Environment.startTurn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes unit from a queue and updates possibleMoves in environment according to it</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.divideIntoAllyAndEnemy">
+<span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">divideIntoAllyAndEnemy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">setOfCreatures</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#divideIntoAllyAndEnemy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.divideIntoAllyAndEnemy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which divides list with all creatures into lists with allied creatures and hostile creatures</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>setOfCreatures</strong> (<em>list</em>) – list with all the creatures</p>
+</dd>
+<dt class="field-even">Return ally<span class="colon">:</span></dt>
+<dd class="field-even"><p>list with allied creatures</p>
+</dd>
+<dt class="field-odd">Return enemy<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list with hostile creatures</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.even">
+<span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">even</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#even"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.even" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if value is even, False otherwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int value</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x</strong> (<em>int</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.getNeighbours">
+<span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">getNeighbours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexField</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#getNeighbours"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.getNeighbours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which gets all the neighbours of specific tile at the hexagonal field</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hexField</strong> (<em>tuple</em>) – input position</p>
+</dd>
+<dt class="field-even">Return neighbours<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary where key is tuple position and value is string which describes direction like “right”, “left”, “bottom_right” etc. It is needed for detecting direction when attacking.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="reinforcmentLearningTest.odd">
+<span class="sig-prename descclassname"><span class="pre">reinforcmentLearningTest.</span></span><span class="sig-name descname"><span class="pre">odd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/reinforcmentLearningTest.html#odd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#reinforcmentLearningTest.odd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if value is odd, False otherwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int value</p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>x</strong> (<em>int</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/reinforcmentLearningTest.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

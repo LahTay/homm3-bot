@@ -1,0 +1,7 @@
+inferno\_upgrade module
+=======================
+
+.. automodule:: inferno_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+rampart\_upgrade module
+=======================
+
+.. automodule:: rampart_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

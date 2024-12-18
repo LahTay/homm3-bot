@@ -1,0 +1,7 @@
+BattleGUI module
+================
+
+.. automodule:: BattleGUI
+   :members:
+   :undoc-members:
+   :show-inheritance:

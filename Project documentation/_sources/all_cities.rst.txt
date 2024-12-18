@@ -1,0 +1,7 @@
+all\_cities module
+==================
+
+.. automodule:: all_cities
+   :members:
+   :undoc-members:
+   :show-inheritance:

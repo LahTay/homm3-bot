@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>enter_city_value module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-enter_city_value">
+<span id="enter-city-value-module"></span><h1>enter_city_value module<a class="headerlink" href="#module-enter_city_value" title="Permalink to this heading">¶</a></h1>
+<p>Module containing an algorithm that states the value of entering the city</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="enter_city_value.enter_city_evaluation">
+<span class="sig-prename descclassname"><span class="pre">enter_city_value.</span></span><span class="sig-name descname"><span class="pre">enter_city_evaluation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hero</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enter_city_value.html#enter_city_evaluation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#enter_city_value.enter_city_evaluation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds value to the city</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – City to evaluate</p></li>
+<li><p><strong>player</strong> – Player instance</p></li>
+<li><p><strong>hero</strong> – Current hero</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="enter_city_value.full_unit_cost">
+<span class="sig-prename descclassname"><span class="pre">enter_city_value.</span></span><span class="sig-name descname"><span class="pre">full_unit_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">town</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enter_city_value.html#full_unit_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#enter_city_value.full_unit_cost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gives value to the city if there are units to buy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>town</strong> – Town object</p>
+</dd>
+<dt class="field-even">Return cost<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cost of buying all units</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="enter_city_value.units_up">
+<span class="sig-prename descclassname"><span class="pre">enter_city_value.</span></span><span class="sig-name descname"><span class="pre">units_up</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">day</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/enter_city_value.html#units_up"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#enter_city_value.units_up" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if there is a new week</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>day</strong> – Parameter stating the day.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean. True -&gt; are up. False -&gt; Not up.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/enter_city_value.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

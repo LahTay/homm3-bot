@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ok_detection &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for ok_detection</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script containing okay button detection, which helps us with handling windows&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cv2</span> <span class="k">as</span> <span class="nn">cv</span>
+<span class="kn">import</span> <span class="nn">pyautogui</span>
+
+
+<div class="viewcode-block" id="compare"><a class="viewcode-back" href="../ok_detection.html#ok_detection.compare">[docs]</a><span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">result_image</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Single function to detect if the best match image is exact same as we need</span>
+<span class="sd">    :param result: image of the best match</span>
+<span class="sd">    :param result_image: stock image (e.g. battle_result.png)</span>
+<span class="sd">    :param image: screenshot</span>
+<span class="sd">    :return: returning 1 if its exact the same</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">is_on_image</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">mn</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">mnLoc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">minMaxLoc</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="n">MPx</span><span class="p">,</span> <span class="n">MPy</span> <span class="o">=</span> <span class="n">mnLoc</span>
+    <span class="n">trows</span><span class="p">,</span> <span class="n">tcols</span> <span class="o">=</span> <span class="n">result_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">ok_compare</span> <span class="o">=</span> <span class="n">image</span><span class="p">[</span><span class="n">MPy</span><span class="p">:</span><span class="n">MPy</span> <span class="o">+</span> <span class="n">trows</span><span class="p">,</span> <span class="n">MPx</span><span class="p">:</span><span class="n">MPx</span> <span class="o">+</span> <span class="n">tcols</span><span class="p">]</span>
+
+    <span class="c1"># comparing to the normal icon image</span>
+    <span class="n">compare1</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">result_image</span><span class="p">,</span> <span class="n">ok_compare</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">compare1</span><span class="o">.</span><span class="n">all</span><span class="p">():</span>
+        <span class="n">is_on_image</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">is_on_image</span></div>
+
+
+<div class="viewcode-block" id="check_ok"><a class="viewcode-back" href="../ok_detection.html#ok_detection.check_ok">[docs]</a><span class="k">def</span> <span class="nf">check_ok</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function responsible for detecting if there is an okay on the screen. Crucial in window handling.</span>
+<span class="sd">    :return: 0 - no okay button, 1 - green okay button, 2 - grey okay button, 3 - skill okay button, 4 - city okay button</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># return 0 if there is no okay button</span>
+    <span class="c1"># return 1 if there is normal (green) okay button</span>
+    <span class="c1"># return 2 if there is grey okay button</span>
+    <span class="c1"># return 3 if there is skill grey okay</span>
+    <span class="c1"># return 4 if there is city okay</span>
+    <span class="n">which_okay</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># getting screenshot, okay icon and grey okay icon</span>
+    <span class="n">ok_image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.\image_processing\okey.png&#39;</span><span class="p">)</span>
+    <span class="n">ok_image_grey</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.\image_processing\okey_grey.png&#39;</span><span class="p">)</span>
+    <span class="n">ok_image_grey_skill</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.\image_processing\okey_skill_grey.png&#39;</span><span class="p">)</span>
+    <span class="n">ok_city</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;.\image_processing\okey_city.png&#39;</span><span class="p">)</span>
+
+    <span class="n">timeout</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">4</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="n">which_okay</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">timeout</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyautogui</span><span class="o">.</span><span class="n">screenshot</span><span class="p">()</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="p">),</span> <span class="n">cv</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">)</span>
+
+        <span class="c1"># matching with the original image</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">TM_SQDIFF_NORMED</span>
+        <span class="n">result_normal</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">ok_image</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="n">result_grey</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">ok_image_grey</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="n">result_grey_skill</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">ok_image_grey_skill</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="n">result_city</span> <span class="o">=</span> <span class="n">cv</span><span class="o">.</span><span class="n">matchTemplate</span><span class="p">(</span><span class="n">ok_city</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="n">a</span> <span class="o">=</span> <span class="n">compare</span><span class="p">(</span><span class="n">result_normal</span><span class="p">,</span> <span class="n">ok_image</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">compare</span><span class="p">(</span><span class="n">result_grey</span><span class="p">,</span> <span class="n">ok_image_grey</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">compare</span><span class="p">(</span><span class="n">result_grey_skill</span><span class="p">,</span> <span class="n">ok_image_grey_skill</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">compare</span><span class="p">(</span><span class="n">result_city</span><span class="p">,</span> <span class="n">ok_city</span><span class="p">,</span> <span class="n">image</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">a</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">which_okay</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">b</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">which_okay</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">which_okay</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">elif</span> <span class="n">d</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">which_okay</span> <span class="o">=</span> <span class="mi">4</span>
+
+    <span class="k">return</span> <span class="n">which_okay</span></div>
+
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

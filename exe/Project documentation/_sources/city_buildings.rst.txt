@@ -1,0 +1,7 @@
+city\_buildings module
+======================
+
+.. automodule:: city_buildings
+   :members:
+   :undoc-members:
+   :show-inheritance:

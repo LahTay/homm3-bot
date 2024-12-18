@@ -1,0 +1,7 @@
+creature\_banks\_value module
+=============================
+
+.. automodule:: creature_banks_value
+   :members:
+   :undoc-members:
+   :show-inheritance:

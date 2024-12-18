@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>player_data &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for player_data</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Script containing player class&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">data.hero</span> <span class="kn">import</span> <span class="n">Hero</span>
+<span class="kn">from</span> <span class="nn">GUI_handling</span> <span class="kn">import</span> <span class="n">AdventureGUI</span>
+
+
+<div class="viewcode-block" id="Player"><a class="viewcode-back" href="../player_data.html#player_data.Player">[docs]</a><span class="k">class</span> <span class="nc">Player</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="n">gold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wood</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ore</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mercury</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sulfur</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                 <span class="n">crystal</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">gems</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">month</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">week</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">day</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Class representing a player. Each player has a different color and different amounts of resources.</span>
+
+<span class="sd">        :param color: Color of the player</span>
+<span class="sd">        :param gold: Amount of owned gold</span>
+<span class="sd">        :param wood: Amount of owned wood</span>
+<span class="sd">        :param ore: Amount of owned ore</span>
+<span class="sd">        :param mercury: Amount of owned mercury</span>
+<span class="sd">        :param sulfur: Amount of owned sulfur</span>
+<span class="sd">        :param crystal: Amount of owned crystal</span>
+<span class="sd">        :param gems: Amount of owned gems</span>
+<span class="sd">        :param month: Current month</span>
+<span class="sd">        :param week: Current week</span>
+<span class="sd">        :param day: Current day</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gold</span> <span class="o">=</span> <span class="n">gold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wood</span> <span class="o">=</span> <span class="n">wood</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ore</span> <span class="o">=</span> <span class="n">ore</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mercury</span> <span class="o">=</span> <span class="n">mercury</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sulfur</span> <span class="o">=</span> <span class="n">sulfur</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crystal</span> <span class="o">=</span> <span class="n">crystal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gems</span> <span class="o">=</span> <span class="n">gems</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resources</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">gold</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">wood</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mercury</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sulfur</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crystal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gems</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heroes</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Hero</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># set type of heroes (list of Hero)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enemies</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Hero</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cities</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">month</span> <span class="o">=</span> <span class="n">month</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">week</span> <span class="o">=</span> <span class="n">week</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="n">day</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">daily_income</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">captured_habitats</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">captured_mines</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<div class="viewcode-block" id="Player.addResource"><a class="viewcode-back" href="../player_data.html#player_data.Player.addResource">[docs]</a>    <span class="k">def</span> <span class="nf">addResource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a specific resource to the player</span>
+
+<span class="sd">        :param idx: parameter specifying a resource</span>
+<span class="sd">        :param value: value of the added resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># [self.gold, self.wood, self.ore, self.mercury, self.sulfur, self.crystal, self.gems]</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gold</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">wood</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ore</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mercury</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sulfur</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">crystal</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gems</span> <span class="o">+=</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="Player.setResource"><a class="viewcode-back" href="../player_data.html#player_data.Player.setResource">[docs]</a>    <span class="k">def</span> <span class="nf">setResource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets a specific resource to the player</span>
+
+<span class="sd">        :param idx: parameter specifying a resource</span>
+<span class="sd">        :param value: value of the set resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gold</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">wood</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">ore</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mercury</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sulfur</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">5</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">crystal</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gems</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+    <span class="c1"># wrapers for gui functions with added camera position change</span>
+<div class="viewcode-block" id="Player.move_camera_up"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_camera_up">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera_up</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera up</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">move_camera_up</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Player.move_camera_down"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_camera_down">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera_down</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera down</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">move_camera_down</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Player.move_camera_left"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_camera_left">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera_left</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera left</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">move_camera_left</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Player.move_camera_right"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_camera_right">[docs]</a>    <span class="k">def</span> <span class="nf">move_camera_right</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera right</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">move_camera_right</span><span class="p">()</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Player.move_to_hero"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_to_hero">[docs]</a>    <span class="k">def</span> <span class="nf">move_to_hero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera to hero</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">press_hero</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">heroes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">position</span></div>
+
+<div class="viewcode-block" id="Player.move_to_town"><a class="viewcode-back" href="../player_data.html#player_data.Player.move_to_town">[docs]</a>    <span class="k">def</span> <span class="nf">move_to_town</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Moves the position of the camera to town</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">AdventureGUI</span><span class="o">.</span><span class="n">press_town</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cities</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">position</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

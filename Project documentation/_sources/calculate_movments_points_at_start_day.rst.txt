@@ -1,0 +1,7 @@
+calculate\_movments\_points\_at\_start\_day module
+==================================================
+
+.. automodule:: calculate_movments_points_at_start_day
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+habitats\_value\_evaluation module
+==================================
+
+.. automodule:: habitats_value_evaluation
+   :members:
+   :undoc-members:
+   :show-inheritance:

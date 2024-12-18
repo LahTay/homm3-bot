@@ -1,0 +1,7 @@
+dungeon\_upgrade module
+=======================
+
+.. automodule:: dungeon_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

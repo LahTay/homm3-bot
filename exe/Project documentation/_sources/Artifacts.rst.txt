@@ -1,0 +1,7 @@
+Artifacts module
+================
+
+.. automodule:: Artifacts
+   :members:
+   :undoc-members:
+   :show-inheritance:

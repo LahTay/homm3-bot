@@ -1,0 +1,7 @@
+detecting\_window module
+========================
+
+.. automodule:: detecting_window
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,7 @@
+BattleAI module
+===============
+
+.. automodule:: BattleAI
+   :members:
+   :undoc-members:
+   :show-inheritance:

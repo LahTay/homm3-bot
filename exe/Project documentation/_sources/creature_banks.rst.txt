@@ -1,0 +1,7 @@
+creature\_banks module
+======================
+
+.. automodule:: creature_banks
+   :members:
+   :undoc-members:
+   :show-inheritance:

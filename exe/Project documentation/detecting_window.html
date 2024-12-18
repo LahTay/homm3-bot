@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>detecting_window module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-detecting_window">
+<span id="detecting-window-module"></span><h1>detecting_window module<a class="headerlink" href="#module-detecting_window" title="Permalink to this heading">¶</a></h1>
+<p>Script containing classes and functions responsible for detecting and handling window pop ups.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="detecting_window.SecondarySkill">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">SecondarySkill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lvl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#SecondarySkill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.SecondarySkill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lvl</strong> (<em>int</em>) – </p></li>
+<li><p><strong>name</strong> (<em>str</em>) – </p></li>
+<li><p><strong>value</strong> (<em>int</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.action_window">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">action_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">which</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hero</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#action_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.action_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deciding which key to press depending on the window we detected</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>which</strong> – 1 -&gt; followers, 2 -&gt; battle, 3 -&gt; pursue, 4-&gt; diplomacy window, 5 -&gt; insulted units</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.compare">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">image</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#compare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.compare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Single function to detect if the best match image is exact same as we need</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> – image of the best match</p></li>
+<li><p><strong>result_image</strong> – stock image (e.g. battle_result.png)</p></li>
+<li><p><strong>image</strong> – screenshot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>returning 1 if its exact the same</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.execute_detecting">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">execute_detecting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Hero</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#execute_detecting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.execute_detecting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executing whole program</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.follow_check">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">follow_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#follow_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.follow_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using tesseract to detect if there is word ‘follow’ in the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img_source</strong> – screenshot</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1 if detects word ‘pursue’, 0 if it is not detected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.pursue_check">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">pursue_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img_source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#pursue_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.pursue_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Using tesseract to detect if there is word ‘pursue’ in the window</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>img_source</strong> – screenshot</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>1 if detects word ‘pursue’, 0 if it is not detected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.skills_window">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">skills_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#skills_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.skills_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Very crude, yet working solution for our skills picking needs for our heroes.
+First, it checks for an ‘okey’ sign on our screen. After detection, if there
+indeed is an ‘okey’ here - we check certain positions and use optical character recognition
+on them to get our skills’ names. Then we pick the best skill according to our calculations
+and click it on our screen in game. Parameter h is our hero and it gets updated with picked
+skill.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>h</strong> – our Hero that gets updated with new skill</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="detecting_window.which_window">
+<span class="sig-prename descclassname"><span class="pre">detecting_window.</span></span><span class="sig-name descname"><span class="pre">which_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/detecting_window.html#which_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#detecting_window.which_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Making screenshot, matching windows with the best match using cv2,
+comparing it with actual image to decide which window popped on screen</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>1 -&gt; followers, 2 -&gt; battle, 3 -&gt; pursue, 4-&gt; diplomacy window, 5 -&gt; insulted units</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/detecting_window.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

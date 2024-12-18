@@ -1,0 +1,16 @@
+image_processing
+================
+
+.. toctree::
+   :maxdepth: 4
+
+   CNN_learning
+   battle_image_processing
+   detecting_window
+   dictionaries
+   hero_filling
+   ocr
+   ocr_dict
+   ok_detection
+   screen_slicing
+   

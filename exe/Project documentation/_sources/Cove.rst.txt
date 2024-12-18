@@ -1,0 +1,7 @@
+Cove module
+===========
+
+.. automodule:: Cove
+   :members:
+   :undoc-members:
+   :show-inheritance:

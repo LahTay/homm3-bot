@@ -1,0 +1,7 @@
+habitats\_cities module
+=======================
+
+.. automodule:: habitats_cities
+   :members:
+   :undoc-members:
+   :show-inheritance:

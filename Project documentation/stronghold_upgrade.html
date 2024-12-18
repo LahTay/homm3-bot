@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>stronghold_upgrade module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-stronghold_upgrade">
+<span id="stronghold-upgrade-module"></span><h1>stronghold_upgrade module<a class="headerlink" href="#module-stronghold_upgrade" title="Permalink to this heading">¶</a></h1>
+<p>Script containing Stronghold castle upgrade alghoritm</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="stronghold_upgrade.build">
+<span class="sig-prename descclassname"><span class="pre">stronghold_upgrade.</span></span><span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildingCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playerRsrc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stronghold_upgrade.html#build"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stronghold_upgrade.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Functions responsible for building and managing resources after construction
+:param buildingCost: Cost of the given building
+:param playerRsrc: Resources of the player</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stronghold_upgrade.resourceCheck">
+<span class="sig-prename descclassname"><span class="pre">stronghold_upgrade.</span></span><span class="sig-name descname"><span class="pre">resourceCheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buildingCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playerRsrc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stronghold_upgrade.html#resourceCheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stronghold_upgrade.resourceCheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a player has enough resources to build.
+:param buildingCost: Cost of the given building
+:param playerRsrc: Resources of the player
+:return: true or false</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stronghold_upgrade.strongholdUpgrade">
+<span class="sig-prename descclassname"><span class="pre">stronghold_upgrade.</span></span><span class="sig-name descname"><span class="pre">strongholdUpgrade</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stronghold</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/stronghold_upgrade.html#strongholdUpgrade"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#stronghold_upgrade.strongholdUpgrade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stronghold castle upgrade alghoritm.
+:param player: Player object
+:param stronghold: Stronghold object
+:return: None</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/stronghold_upgrade.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

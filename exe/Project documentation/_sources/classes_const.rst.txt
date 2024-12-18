@@ -1,0 +1,7 @@
+classes\_const module
+=====================
+
+.. automodule:: classes_const
+   :members:
+   :undoc-members:
+   :show-inheritance:

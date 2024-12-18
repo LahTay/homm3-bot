@@ -1,0 +1,7 @@
+cove\_upgrade module
+====================
+
+.. automodule:: cove_upgrade
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>battle_image_processing module &#8212; homm3-bot 1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-battle_image_processing">
+<span id="battle-image-processing-module"></span><h1>battle_image_processing module<a class="headerlink" href="#module-battle_image_processing" title="Permalink to this heading">¶</a></h1>
+<p>Script that contains functions used in battle image recognition</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.checkForObstacle">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">checkForObstacle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#checkForObstacle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.checkForObstacle" title="Permalink to this definition">¶</a></dt>
+<dd><p>function chcecking if on select tile we really have obstacle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>target</strong> (<em>tuple</em>) – tile coordinates to check</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>information if on tile is obstacle</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.checkIfTurnIsOurs">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">checkIfTurnIsOurs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#checkIfTurnIsOurs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.checkIfTurnIsOurs" title="Permalink to this definition">¶</a></dt>
+<dd><p>function checking if currently is our turn</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>screen</strong> – screenslicing object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>value telling if the turn is ours or not</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.check_terrain">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">check_terrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bnn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CNN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ScreenStorage</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#check_terrain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.check_terrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>function for detecting obstacles at beginning of battle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bnn</strong> (<em>CNN</em>) – neural network object</p></li>
+<li><p><strong>screen</strong> (<em>ScreenStorage</em>) – screen slicing object</p></li>
+<li><p><strong>units</strong> – list of units on map</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of potential obstacles on map</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.distance">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.distance" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> – point for which we are detecting nearest element</p></li>
+<li><p><strong>points</strong> – list of points with names</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>name of nearest field from point to given point</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.distance2">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">distance2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#distance2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.distance2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point</strong> – point for which we are detecting nearest element, different input data than distance function</p></li>
+<li><p><strong>points</strong> – list of points with names</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>name of nearest field from point to given point</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.find_first_unit">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">find_first_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">screen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ScreenStorage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#find_first_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.find_first_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>function finding where is current first unit to find how many units are currently in battle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>screen</strong> (<em>ScreenStorage</em>) – screenslicnig object</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>amount of queue tiles that we need to check</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.find_unit">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">find_unit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#find_unit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.find_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>function checking if there is unit on coordinates xy</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x index of tile in battle</p></li>
+<li><p><strong>y</strong> – y index of tile in battle</p></li>
+<li><p><strong>base</strong> – clear image of queue</p></li>
+<li><p><strong>screen</strong> – screen slicing object</p></li>
+<li><p><strong>n</strong> – number of units in queue</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>number of unit in queue we are currently pointing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.initialize_BNN">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">initialize_BNN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#initialize_BNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.initialize_BNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>function creating neural network object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>neural network object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.initialize_QNN">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">initialize_QNN</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#initialize_QNN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.initialize_QNN" title="Permalink to this definition">¶</a></dt>
+<dd><p>function creating neural network object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>neural network object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="battle_image_processing.mouse_unit_check">
+<span class="sig-prename descclassname"><span class="pre">battle_image_processing.</span></span><span class="sig-name descname"><span class="pre">mouse_unit_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qnn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DumbNN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ScreenStorage</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/battle_image_processing.html#mouse_unit_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#battle_image_processing.mouse_unit_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>function checking units in battle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qnn</strong> (<em>DumbNN</em>) – neural network for checking units in battle</p></li>
+<li><p><strong>screen</strong> (<em>ScreenStorage</em>) – screen slicing object</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>list of creatureboxes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">homm3-bot</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Fryderyk Róg, Kacper Plesiak, Tymoteusz Skrzyński, Daniel Bil, Michał Gruba, Bartosz Szczepanek, Piotr Łyczko, Mateusz Mikszewicz, Alan Konopko, Mateusz Comblik.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/battle_image_processing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
